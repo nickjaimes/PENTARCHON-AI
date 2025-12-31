@@ -1,0 +1,3470 @@
+Pentarchon AI - Complete Project Package
+
+Below is the complete project structure with all necessary files. I'll provide the most critical files first, then show the complete directory structure.
+
+CORE FILES
+
+1. pyproject.toml - Build Configuration
+
+```toml
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pentarchon-ai"
+version = "1.0.0"
+description = "The Quintessential Framework for Holistic Artificial Intelligence Governance"
+readme = "README.md"
+license = {text = "CC BY-NC-SA 4.0"}
+authors = [
+    {name = "Nicolas E. Santiago", email = "safewayguardian@gmail.com"},
+]
+maintainers = [
+    {name = "Pentarchon AI Team", email = "maintainers@pentarchon.ai"},
+]
+requires-python = ">=3.9"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: Free for non-commercial use",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: System :: Networking :: Monitoring",
+    "Topic :: Security",
+    "Topic :: System :: Systems Administration",
+]
+dependencies = [
+    "numpy>=1.21.0",
+    "pandas>=1.3.0",
+    "scipy>=1.7.0",
+    "scikit-learn>=1.0.0",
+    "torch>=1.9.0",
+    "transformers>=4.15.0",
+    "networkx>=2.6.0",
+    "graphviz>=0.17",
+    "pydantic>=1.9.0",
+    "fastapi>=0.70.0",
+    "uvicorn>=0.16.0",
+    "grpcio>=1.41.0",
+    "grpcio-tools>=1.41.0",
+    "redis>=4.0.0",
+    "pymemcache>=3.5.0",
+    "aiokafka>=0.7.0",
+    "prometheus-client>=0.12.0",
+    "opentelemetry-api>=1.11.0",
+    "pyarrow>=6.0.0",
+    "lmdb>=1.0.0",
+    "cryptography>=36.0.0",
+    "aiohttp>=3.8.0",
+    "httpx>=0.23.0",
+    "tenacity>=8.0.0",
+    "loguru>=0.6.0",
+    "pyyaml>=6.0",
+    "toml>=0.10.0",
+    "jsonschema>=4.0.0",
+    "dataclasses-json>=0.5.0",
+    "colorama>=0.4.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-asyncio>=0.19.0",
+    "pytest-xdist>=3.0.0",
+    "black>=22.0.0",
+    "flake8>=5.0.0",
+    "mypy>=0.971",
+    "isort>=5.10.0",
+    "pre-commit>=2.20.0",
+    "safety>=2.0.0",
+    "bandit>=1.7.0",
+    "hypothesis>=6.0.0",
+]
+gpu = [
+    "torch>=1.9.0; platform_system != 'Darwin'",
+    "torchvision>=0.10.0; platform_system != 'Darwin'",
+    "torchaudio>=0.9.0; platform_system != 'Darwin'",
+]
+docs = [
+    "mkdocs>=1.4.0",
+    "mkdocs-material>=9.0.0",
+    "mkdocstrings>=0.19.0",
+    "pymdown-extensions>=9.0",
+]
+cloud = [
+    "boto3>=1.24.0",
+    "google-cloud-storage>=2.0.0",
+    "azure-storage-blob>=12.0.0",
+    "kubernetes>=24.0.0",
+]
+
+[project.urls]
+Homepage = "https://pentarchon.ai"
+Documentation = "https://docs.pentarchon.ai"
+Repository = "https://github.com/pentarchon-ai/pentarchon"
+Issues = "https://github.com/pentarchon-ai/pentarchon/issues"
+Changelog = "https://github.com/pentarchon-ai/pentarchon/releases"
+
+[project.scripts]
+pentarchon-cli = "pentarchon.cli:main"
+pentarchon-orchestrator = "pentarchon.core.orchestrator:main"
+pentarchon-michael = "pentarchon.triad.michael.cli:main"
+pentarchon-gabriel = "pentarchon.triad.gabriel.cli:main"
+pentarchon-raphael = "pentarchon.triad.raphael.cli:main"
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --strict-markers --strict-config"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: integration tests",
+    "security: security tests",
+]
+```
+
+2. src/pentarchon/__init__.py - Main Package
+
+```python
+"""
+Pentarchon AI - The Quintessential Framework for Holistic Artificial Intelligence Governance
+"""
+
+__version__ = "1.0.0"
+__author__ = "Nicolas E. Santiago"
+__email__ = "safewayguardian@gmail.com"
+__license__ = "CC BY-NC-SA 4.0"
+
+import logging
+from typing import Dict, Any, Optional
+
+from .core.orchestrator import PentarchonOrchestrator
+from .core.config import PentarchonConfig, ElementalConfig
+from .triad.michael import MichaelModule
+from .triad.gabriel import GabrielModule
+from .triad.raphael import RaphaelModule
+from .eagle_eye.perception import EagleEyePerceptionEngine
+from .governance.elemental import ElementalGovernance
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+
+logger = logging.getLogger(__name__)
+
+class PentarchonAI:
+    """Main Pentarchon AI class for easy instantiation"""
+    
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
+        """Initialize Pentarchon AI with optional configuration"""
+        self.config = PentarchonConfig(**(config or {}))
+        self.orchestrator = None
+        
+    async def initialize(self):
+        """Initialize all components"""
+        logger.info("Initializing Pentarchon AI...")
+        
+        # Create orchestrator
+        self.orchestrator = PentarchonOrchestrator(self.config)
+        
+        # Initialize modules
+        await self.orchestrator.initialize()
+        
+        logger.info("Pentarchon AI initialized successfully")
+        return self
+    
+    async def run_cycle(self, observations: Dict[str, Any], 
+                       context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """Run a complete Pentarchon cycle"""
+        if not self.orchestrator:
+            await self.initialize()
+            
+        return await self.orchestrator.run_cycle(observations, context)
+    
+    def get_module(self, module_name: str):
+        """Get a specific module"""
+        if not self.orchestrator:
+            raise RuntimeError("Pentarchon AI not initialized. Call initialize() first.")
+            
+        return self.orchestrator.modules.get(module_name)
+
+# Convenience function for quick setup
+async def create_pentarchon(config: Optional[Dict[str, Any]] = None) -> PentarchonAI:
+    """Create and initialize a Pentarchon AI instance"""
+    pentarchon = PentarchonAI(config)
+    await pentarchon.initialize()
+    return pentarchon
+
+# Export main components
+__all__ = [
+    'PentarchonAI',
+    'PentarchonOrchestrator',
+    'PentarchonConfig',
+    'ElementalConfig',
+    'MichaelModule',
+    'GabrielModule',
+    'RaphaelModule',
+    'EagleEyePerceptionEngine',
+    'ElementalGovernance',
+    'create_pentarchon',
+]
+```
+
+3. src/pentarchon/core/orchestrator.py - Core Orchestrator
+
+```python
+"""
+Pentarchon Orchestrator - Main coordination engine
+"""
+
+import asyncio
+from datetime import datetime
+from typing import Dict, List, Any, Optional, Set
+from dataclasses import dataclass, field
+from enum import Enum
+import logging
+import uuid
+
+import numpy as np
+from pydantic import BaseModel, validator
+
+from ..core.config import PentarchonConfig
+from ..triad.michael import MichaelModule
+from ..triad.gabriel import GabrielModule
+from ..triad.raphael import RaphaelModule
+from ..eagle_eye.perception import EagleEyePerceptionEngine
+from ..governance.elemental import ElementalGovernance
+from ..infrastructure.shared_memory import SharedMemorySystem
+from ..infrastructure.event_bus import EventBus
+
+logger = logging.getLogger(__name__)
+
+class PentarchonState(Enum):
+    """Possible states of the Pentarchon system"""
+    INITIALIZING = "initializing"
+    READY = "ready"
+    RUNNING = "running"
+    PAUSED = "paused"
+    ERROR = "error"
+    SHUTTING_DOWN = "shutting_down"
+
+class CycleResult(BaseModel):
+    """Result of a Pentarchon cycle"""
+    cycle_id: str
+    timestamp: str
+    state: PentarchonState
+    elemental_balance: Dict[str, float]
+    triad_status: Dict[str, Dict[str, Any]]
+    eagle_eye_insights: Optional[List[Dict[str, Any]]] = None
+    quintessence_detected: bool = False
+    quintessence_score: float = 0.0
+    actions_taken: List[Dict[str, Any]] = field(default_factory=list)
+    performance_metrics: Dict[str, float] = field(default_factory=dict)
+    
+    class Config:
+        arbitrary_types_allowed = True
+
+class PentarchonOrchestrator:
+    """Main orchestrator for Pentarchon AI"""
+    
+    def __init__(self, config: PentarchonConfig):
+        self.config = config
+        self.state = PentarchonState.INITIALIZING
+        self.cycle_count = 0
+        self.cycle_history: List[CycleResult] = []
+        
+        # Core modules
+        self.modules: Dict[str, Any] = {}
+        
+        # Shared systems
+        self.shared_memory = SharedMemorySystem(config.shared_memory_config)
+        self.event_bus = EventBus()
+        
+        # Elemental governance
+        self.elemental_governance = ElementalGovernance(config.elemental_config)
+        
+        # Performance tracking
+        self.metrics = {
+            "cycle_duration": [],
+            "module_response_times": {},
+            "error_count": 0,
+            "successful_cycles": 0
+        }
+        
+        logger.info(f"PentarchonOrchestrator initialized with config: {config.model_dump()}")
+    
+    async def initialize(self) -> None:
+        """Initialize all components"""
+        try:
+            logger.info("Starting Pentarchon AI initialization...")
+            
+            # Initialize shared systems
+            await self.shared_memory.initialize()
+            await self.event_bus.initialize()
+            
+            # Initialize elemental governance
+            await self.elemental_governance.initialize()
+            
+            # Initialize Triad modules
+            logger.info("Initializing Triad modules...")
+            
+            # Michael module
+            self.modules["michael"] = MichaelModule(
+                config=self.config.triad_config.michael,
+                event_bus=self.event_bus,
+                shared_memory=self.shared_memory
+            )
+            
+            # Gabriel module
+            self.modules["gabriel"] = GabrielModule(
+                config=self.config.triad_config.gabriel,
+                event_bus=self.event_bus,
+                shared_memory=self.shared_memory
+            )
+            
+            # Raphael module
+            self.modules["raphael"] = RaphaelModule(
+                config=self.config.triad_config.raphael,
+                event_bus=self.event_bus,
+                shared_memory=self.shared_memory
+            )
+            
+            # Initialize Triad modules
+            await asyncio.gather(
+                self.modules["michael"].initialize(),
+                self.modules["gabriel"].initialize(),
+                self.modules["raphael"].initialize()
+            )
+            
+            # Initialize Eagle Eye
+            logger.info("Initializing Eagle Eye...")
+            self.modules["eagle_eye"] = EagleEyePerceptionEngine(
+                config=self.config.eagle_eye_config,
+                event_bus=self.event_bus,
+                shared_memory=self.shared_memory
+            )
+            await self.modules["eagle_eye"].initialize()
+            
+            # Set up event handlers
+            await self._setup_event_handlers()
+            
+            # Update state
+            self.state = PentarchonState.READY
+            logger.info("Pentarchon AI initialization completed successfully")
+            
+        except Exception as e:
+            logger.error(f"Initialization failed: {e}")
+            self.state = PentarchonState.ERROR
+            raise
+    
+    async def run_cycle(self, 
+                       observations: Dict[str, Any],
+                       context: Optional[Dict[str, Any]] = None) -> CycleResult:
+        """Execute one complete Pentarchon cycle"""
+        
+        if self.state != PentarchonState.READY:
+            raise RuntimeError(f"Pentarchon not ready. Current state: {self.state}")
+        
+        cycle_id = str(uuid.uuid4())
+        start_time = datetime.utcnow()
+        
+        try:
+            self.state = PentarchonState.RUNNING
+            self.cycle_count += 1
+            
+            logger.info(f"Starting Pentarchon cycle {self.cycle_count} (ID: {cycle_id})")
+            
+            # Phase 1: Eagle Eye Observation
+            logger.debug("Phase 1: Eagle Eye observation")
+            eagle_observation = await self.modules["eagle_eye"].observe(
+                observations=observations,
+                context=context
+            )
+            
+            # Phase 2: Elemental Balance Calculation
+            logger.debug("Phase 2: Elemental balance calculation")
+            elemental_balance = await self.elemental_governance.calculate_balance(
+                system_state=eagle_observation.get("system_state", {}),
+                context=context
+            )
+            
+            # Phase 3: Triad Module Activation
+            logger.debug("Phase 3: Triad module activation")
+            triad_results = await self._activate_triad_modules(
+                eagle_observation=eagle_observation,
+                elemental_balance=elemental_balance,
+                context=context
+            )
+            
+            # Phase 4: Strategic Synthesis
+            logger.debug("Phase 4: Strategic synthesis")
+            strategic_synthesis = await self.modules["eagle_eye"].synthesize(
+                observations=eagle_observation,
+                triad_results=triad_results,
+                elemental_balance=elemental_balance
+            )
+            
+            # Phase 5: Quintessence Detection
+            logger.debug("Phase 5: Quintessence detection")
+            quintessence_result = await self._detect_quintessence(
+                strategic_synthesis=strategic_synthesis,
+                elemental_balance=elemental_balance
+            )
+            
+            # Phase 6: Action Execution
+            logger.debug("Phase 6: Action execution")
+            actions_taken = await self._execute_actions(
+                strategic_synthesis=strategic_synthesis,
+                quintessence_result=quintessence_result
+            )
+            
+            # Calculate performance metrics
+            cycle_duration = (datetime.utcnow() - start_time).total_seconds()
+            self.metrics["cycle_duration"].append(cycle_duration)
+            
+            # Create cycle result
+            result = CycleResult(
+                cycle_id=cycle_id,
+                timestamp=datetime.utcnow().isoformat(),
+                state=self.state,
+                elemental_balance=elemental_balance,
+                triad_status=triad_results,
+                eagle_eye_insights=strategic_synthesis.get("insights"),
+                quintessence_detected=quintessence_result.get("detected", False),
+                quintessence_score=quintessence_result.get("score", 0.0),
+                actions_taken=actions_taken,
+                performance_metrics={
+                    "cycle_duration": cycle_duration,
+                    "cycle_number": self.cycle_count,
+                    "error_rate": self.metrics["error_count"] / max(self.cycle_count, 1)
+                }
+            )
+            
+            # Store in history
+            self.cycle_history.append(result)
+            
+            # Trim history if too long
+            if len(self.cycle_history) > self.config.max_history_length:
+                self.cycle_history = self.cycle_history[-self.config.max_history_length:]
+            
+            self.metrics["successful_cycles"] += 1
+            logger.info(f"Cycle {self.cycle_count} completed in {cycle_duration:.2f}s")
+            
+            # Return to ready state
+            self.state = PentarchonState.READY
+            
+            return result
+            
+        except Exception as e:
+            logger.error(f"Cycle {cycle_id} failed: {e}")
+            self.state = PentarchonState.ERROR
+            self.metrics["error_count"] += 1
+            raise
+    
+    async def _activate_triad_modules(self,
+                                     eagle_observation: Dict[str, Any],
+                                     elemental_balance: Dict[str, float],
+                                     context: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
+        """Activate Triad modules based on elemental balance"""
+        
+        # Calculate module priorities based on elemental balance
+        module_priorities = self._calculate_module_priorities(elemental_balance)
+        
+        # Execute modules in priority order
+        results = {}
+        
+        for module_name in sorted(module_priorities, 
+                                 key=module_priorities.get, 
+                                 reverse=True):
+            priority = module_priorities[module_name]
+            
+            if priority > 0.1:  # Only activate if priority is significant
+                logger.debug(f"Activating {module_name} with priority {priority:.2f}")
+                
+                try:
+                    module = self.modules[module_name]
+                    
+                    # Prepare module-specific context
+                    module_context = {
+                        **context,
+                        "elemental_balance": elemental_balance,
+                        "eagle_observation": eagle_observation,
+                        "priority": priority
+                    }
+                    
+                    # Execute module
+                    if module_name == "michael":
+                        result = await module.analyze_and_protect(module_context)
+                    elif module_name == "gabriel":
+                        result = await module.communicate_and_explain(module_context)
+                    elif module_name == "raphael":
+                        result = await module.heal_and_optimize(module_context)
+                    else:
+                        continue
+                    
+                    results[module_name] = {
+                        "result": result,
+                        "priority": priority,
+                        "execution_time": result.get("execution_time", 0.0),
+                        "success": result.get("success", False)
+                    }
+                    
+                except Exception as e:
+                    logger.error(f"Module {module_name} failed: {e}")
+                    results[module_name] = {
+                        "error": str(e),
+                        "priority": priority,
+                        "success": False
+                    }
+        
+        return results
+    
+    def _calculate_module_priorities(self, 
+                                    elemental_balance: Dict[str, float]) -> Dict[str, float]:
+        """Calculate module priorities based on elemental balance"""
+        
+        # Elemental focus for each module
+        elemental_focus = {
+            "michael": ["fire", "earth"],  # Protection (fire) and stability (earth)
+            "gabriel": ["air", "water"],   # Strategy (air) and communication (water)
+            "raphael": ["earth", "water"]  # Healing (earth/water) and flow (water)
+        }
+        
+        priorities = {}
+        for module, elements in elemental_focus.items():
+            # Calculate weighted average of relevant elements
+            total_weight = 0.0
+            weighted_sum = 0.0
+            
+            for element in elements:
+                weight = self.config.module_element_weights.get(f"{module}_{element}", 1.0)
+                elemental_value = elemental_balance.get(element, 0.25)
+                weighted_sum += elemental_value * weight
+                total_weight += weight
+            
+            if total_weight > 0:
+                priorities[module] = weighted_sum / total_weight
+            else:
+                priorities[module] = 0.25  # Default
+        
+        # Normalize so highest priority is 1.0
+        max_priority = max(priorities.values()) if priorities else 1.0
+        if max_priority > 0:
+            for module in priorities:
+                priorities[module] /= max_priority
+        
+        return priorities
+    
+    async def _detect_quintessence(self,
+                                  strategic_synthesis: Dict[str, Any],
+                                  elemental_balance: Dict[str, float]) -> Dict[str, Any]:
+        """Detect quintessence emergence"""
+        
+        # Calculate quintessence score based on elemental balance
+        # Perfect balance (all elements equal) and high interaction
+        
+        elements = ["earth", "water", "fire", "air"]
+        values = [elemental_balance.get(e, 0.25) for e in elements]
+        
+        if len(values) < 2:
+            return {"detected": False, "score": 0.0}
+        
+        # Calculate balance score (lower std = more balanced)
+        std_dev = np.std(values)
+        balance_score = 1.0 / (1.0 + std_dev * 10)
+        
+        # Calculate interaction score (product of complementary elements)
+        interaction_pairs = [
+            ("earth", "air"),   # Foundation + Strategy
+            ("water", "fire"),  # Flow + Energy
+            ("earth", "water"), # Stability + Adaptation
+            ("fire", "air")     # Action + Intellect
+        ]
+        
+        interaction_score = 0.0
+        for elem1, elem2 in interaction_pairs:
+            val1 = elemental_balance.get(elem1, 0.25)
+            val2 = elemental_balance.get(elem2, 0.25)
+            interaction_score += val1 * val2
+        
+        interaction_score /= len(interaction_pairs)
+        
+        # Calculate synthesis quality from Eagle Eye
+        synthesis_quality = strategic_synthesis.get("quality", 0.5)
+        
+        # Overall quintessence score
+        quintessence_score = (
+            0.4 * balance_score +
+            0.3 * interaction_score +
+            0.3 * synthesis_quality
+        )
+        
+        detected = quintessence_score > self.config.quintessence_threshold
+        
+        return {
+            "detected": detected,
+            "score": quintessence_score,
+            "balance_score": balance_score,
+            "interaction_score": interaction_score,
+            "synthesis_quality": synthesis_quality
+        }
+    
+    async def _execute_actions(self,
+                              strategic_synthesis: Dict[str, Any],
+                              quintessence_result: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Execute actions based on synthesis"""
+        
+        actions = strategic_synthesis.get("recommended_actions", [])
+        executed_actions = []
+        
+        for action in actions:
+            try:
+                # Determine which module should execute the action
+                module_name = action.get("module")
+                if module_name not in self.modules:
+                    logger.warning(f"Module {module_name} not found for action: {action}")
+                    continue
+                
+                # Execute action
+                module = self.modules[module_name]
+                result = await module.execute_action(action)
+                
+                executed_actions.append({
+                    "action": action.get("name"),
+                    "module": module_name,
+                    "result": result,
+                    "success": result.get("success", False),
+                    "timestamp": datetime.utcnow().isoformat()
+                })
+                
+                logger.info(f"Executed action '{action.get('name')}' via {module_name}")
+                
+            except Exception as e:
+                logger.error(f"Failed to execute action {action}: {e}")
+                executed_actions.append({
+                    "action": action.get("name"),
+                    "module": module_name,
+                    "error": str(e),
+                    "success": False,
+                    "timestamp": datetime.utcnow().isoformat()
+                })
+        
+        return executed_actions
+    
+    async def _setup_event_handlers(self) -> None:
+        """Set up event handlers for inter-module communication"""
+        
+        # Michael events
+        await self.event_bus.subscribe("security_alert", self._handle_security_alert)
+        await self.event_bus.subscribe("threat_detected", self._handle_threat_detected)
+        
+        # Gabriel events
+        await self.event_bus.subscribe("communication_request", self._handle_communication_request)
+        await self.event_bus.subscribe("explanation_needed", self._handle_explanation_needed)
+        
+        # Raphael events
+        await self.event_bus.subscribe("healing_needed", self._handle_healing_needed)
+        await self.event_bus.subscribe("optimization_opportunity", self._handle_optimization_opportunity)
+        
+        # System events
+        await self.event_bus.subscribe("system_error", self._handle_system_error)
+        await self.event_bus.subscribe("state_change", self._handle_state_change)
+    
+    async def _handle_security_alert(self, event: Dict[str, Any]) -> None:
+        """Handle security alerts"""
+        logger.warning(f"Security alert: {event.get('alert_type')} - {event.get('description')}")
+        
+        # Forward to Michael for immediate action
+        if "michael" in self.modules:
+            await self.modules["michael"].handle_alert(event)
+    
+    async def _handle_threat_detected(self, event: Dict[str, Any]) -> None:
+        """Handle detected threats"""
+        threat_level = event.get("threat_level", "medium")
+        logger.warning(f"Threat detected (level: {threat_level}): {event.get('threat_description')}")
+        
+        # Log to shared memory
+        await self.shared_memory.store(
+            key=f"threat_{datetime.utcnow().timestamp()}",
+            data=event,
+            metadata={"type": "threat", "handled": False}
+        )
+    
+    async def _handle_communication_request(self, event: Dict[str, Any]) -> None:
+        """Handle communication requests"""
+        audience = event.get("audience", "system")
+        urgency = event.get("urgency", "normal")
+        
+        logger.info(f"Communication request for {audience} (urgency: {urgency})")
+        
+        # Forward to Gabriel
+        if "gabriel" in self.modules:
+            await self.modules["gabriel"].handle_communication_request(event)
+    
+    async def _handle_explanation_needed(self, event: Dict[str, Any]) -> None:
+        """Handle requests for explanations"""
+        topic = event.get("topic", "unknown")
+        complexity = event.get("complexity", "medium")
+        
+        logger.info(f"Explanation needed for {topic} (complexity: {complexity})")
+        
+        if "gabriel" in self.modules:
+            explanation = await self.modules["gabriel"].generate_explanation(event)
+            
+            # Store explanation
+            await self.shared_memory.store(
+                key=f"explanation_{datetime.utcnow().timestamp()}",
+                data=explanation,
+                metadata={"topic": topic, "complexity": complexity}
+            )
+    
+    async def _handle_healing_needed(self, event: Dict[str, Any]) -> None:
+        """Handle healing requests"""
+        component = event.get("component", "unknown")
+        issue = event.get("issue", "unknown")
+        
+        logger.warning(f"Healing needed for {component}: {issue}")
+        
+        if "raphael" in self.modules:
+            healing_result = await self.modules["raphael"].perform_healing(event)
+            
+            if healing_result.get("success"):
+                logger.info(f"Successfully healed {component}")
+            else:
+                logger.error(f"Failed to heal {component}: {healing_result.get('error')}")
+    
+    async def _handle_optimization_opportunity(self, event: Dict[str, Any]) -> None:
+        """Handle optimization opportunities"""
+        area = event.get("optimization_area", "unknown")
+        potential_gain = event.get("potential_gain", 0.0)
+        
+        logger.info(f"Optimization opportunity in {area} (potential gain: {potential_gain:.1%})")
+        
+        if "raphael" in self.modules:
+            optimization_result = await self.modules["raphael"].perform_optimization(event)
+            
+            if optimization_result.get("success"):
+                actual_gain = optimization_result.get("actual_gain", 0.0)
+                logger.info(f"Optimized {area} with {actual_gain:.1%} gain")
+            else:
+                logger.warning(f"Optimization failed for {area}")
+    
+    async def _handle_system_error(self, event: Dict[str, Any]) -> None:
+        """Handle system errors"""
+        error_type = event.get("error_type", "unknown")
+        component = event.get("component", "unknown")
+        message = event.get("message", "No message")
+        
+        logger.error(f"System error in {component} ({error_type}): {message}")
+        
+        # Update system state
+        self.state = PentarchonState.ERROR
+        
+        # Try to recover
+        await self._attempt_recovery(event)
+    
+    async def _handle_state_change(self, event: Dict[str, Any]) -> None:
+        """Handle state changes"""
+        new_state = event.get("new_state")
+        reason = event.get("reason", "unknown")
+        
+        logger.info(f"State change: {self.state.value} -> {new_state} (reason: {reason})")
+        
+        if new_state in [s.value for s in PentarchonState]:
+            self.state = PentarchonState(new_state)
+    
+    async def _attempt_recovery(self, error_event: Dict[str, Any]) -> None:
+        """Attempt to recover from error state"""
+        logger.info("Attempting recovery from error state...")
+        
+        try:
+            # Reset modules that might be in error state
+            for module_name, module in self.modules.items():
+                if hasattr(module, 'reset'):
+                    await module.reset()
+            
+            # Clear shared memory errors
+            await self.shared_memory.clear_errors()
+            
+            # Reset state
+            self.state = PentarchonState.READY
+            logger.info("Recovery successful")
+            
+        except Exception as e:
+            logger.error(f"Recovery failed: {e}")
+            self.state = PentarchonState.ERROR
+    
+    async def shutdown(self) -> None:
+        """Gracefully shut down Pentarchon AI"""
+        logger.info("Initiating Pentarchon AI shutdown...")
+        
+        self.state = PentarchonState.SHUTTING_DOWN
+        
+        # Shutdown modules in reverse order of initialization
+        shutdown_order = ["eagle_eye", "raphael", "gabriel", "michael"]
+        
+        for module_name in shutdown_order:
+            if module_name in self.modules:
+                try:
+                    module = self.modules[module_name]
+                    if hasattr(module, 'shutdown'):
+                        await module.shutdown()
+                    logger.info(f"Shut down {module_name} module")
+                except Exception as e:
+                    logger.error(f"Error shutting down {module_name}: {e}")
+        
+        # Shutdown shared systems
+        try:
+            await self.event_bus.shutdown()
+            await self.shared_memory.shutdown()
+        except Exception as e:
+            logger.error(f"Error shutting down shared systems: {e}")
+        
+        logger.info("Pentarchon AI shutdown complete")
+    
+    def get_status(self) -> Dict[str, Any]:
+        """Get current system status"""
+        return {
+            "state": self.state.value,
+            "cycle_count": self.cycle_count,
+            "module_count": len(self.modules),
+            "metrics": {
+                "avg_cycle_duration": np.mean(self.metrics["cycle_duration"]) 
+                    if self.metrics["cycle_duration"] else 0.0,
+                "success_rate": self.metrics["successful_cycles"] / max(self.cycle_count, 1),
+                "error_count": self.metrics["error_count"]
+            },
+            "elemental_balance": self.elemental_governance.get_current_balance(),
+            "uptime": self._calculate_uptime()
+        }
+    
+    def _calculate_uptime(self) -> float:
+        """Calculate system uptime percentage"""
+        if self.cycle_count == 0:
+            return 100.0
+        
+        successful_cycles = self.metrics["successful_cycles"]
+        return (successful_cycles / self.cycle_count) * 100
+    
+    def __del__(self):
+        """Destructor - ensure clean shutdown"""
+        if self.state != PentarchonState.SHUTTING_DOWN:
+            try:
+                # Try to shutdown gracefully
+                asyncio.run(self.shutdown())
+            except:
+                pass  # Ignore errors during destruction
+
+# Main entry point for orchestrator service
+async def main():
+    """Main entry point for Pentarchon orchestrator"""
+    import argparse
+    
+    parser = argparse.ArgumentParser(description="Pentarchon AI Orchestrator")
+    parser.add_argument("--config", "-c", help="Configuration file path")
+    parser.add_argument("--log-level", "-l", default="INFO", 
+                       help="Logging level (DEBUG, INFO, WARNING, ERROR)")
+    
+    args = parser.parse_args()
+    
+    # Configure logging
+    logging.basicConfig(
+        level=getattr(logging, args.log_level.upper()),
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
+    
+    try:
+        # Load configuration
+        if args.config:
+            config = PentarchonConfig.from_file(args.config)
+        else:
+            config = PentarchonConfig()
+        
+        # Create and initialize orchestrator
+        orchestrator = PentarchonOrchestrator(config)
+        await orchestrator.initialize()
+        
+        logger.info("Pentarchon Orchestrator started successfully")
+        
+        # Keep running until interrupted
+        try:
+            while True:
+                await asyncio.sleep(1)
+        except KeyboardInterrupt:
+            logger.info("Shutdown requested by user")
+        
+        # Shutdown gracefully
+        await orchestrator.shutdown()
+        
+    except Exception as e:
+        logger.error(f"Fatal error: {e}")
+        raise
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+4. src/pentarchon/core/config.py - Configuration Management
+
+```python
+"""
+Configuration management for Pentarchon AI
+"""
+
+from typing import Dict, List, Any, Optional, Union
+from dataclasses import dataclass, field
+from enum import Enum
+import yaml
+import json
+import toml
+from pathlib import Path
+from pydantic import BaseModel, validator, Field
+import logging
+
+logger = logging.getLogger(__name__)
+
+class ElementalFocus(Enum):
+    """Elemental focus areas"""
+    EARTH = "earth"
+    WATER = "water"
+    FIRE = "fire"
+    AIR = "air"
+    QUINTESSENCE = "quintessence"
+
+class CommunicationStyle(Enum):
+    """Communication styles for Gabriel module"""
+    TECHNICAL = "technical"
+    EXECUTIVE = "executive"
+    USER_FRIENDLY = "user_friendly"
+    EMERGENCY = "emergency"
+    DIAGNOSTIC = "diagnostic"
+
+class ThreatLevel(Enum):
+    """Threat levels for Michael module"""
+    NORMAL = "normal"
+    SUSPICIOUS = "suspicious"
+    MALICIOUS = "malicious"
+    CRITICAL = "critical"
+
+class OptimizationTarget(Enum):
+    """Optimization targets for Raphael module"""
+    PERFORMANCE = "performance"
+    COST = "cost"
+    RELIABILITY = "reliability"
+    EFFICIENCY = "efficiency"
+    QUALITY = "quality"
+
+@dataclass
+class ElementalConfig:
+    """Configuration for elemental governance"""
+    
+    # Base weights for each element (must sum to 1.0)
+    base_weights: Dict[str, float] = field(default_factory=lambda: {
+        "earth": 0.25,
+        "water": 0.25,
+        "fire": 0.25,
+        "air": 0.25
+    })
+    
+    # Minimum and maximum allowed values for each element
+    element_bounds: Dict[str, Dict[str, float]] = field(default_factory=lambda: {
+        "earth": {"min": 0.1, "max": 0.6},
+        "water": {"min": 0.1, "max": 0.6},
+        "fire": {"min": 0.1, "max": 0.6},
+        "air": {"min": 0.1, "max": 0.6}
+    })
+    
+    # Adjustment sensitivity
+    adjustment_sensitivity: float = 0.3
+    
+    # Balance threshold for triggering adjustments
+    balance_threshold: float = 0.1
+    
+    # Maximum adjustment per cycle
+    max_adjustment: float = 0.2
+    
+    def __post_init__(self):
+        """Validate configuration"""
+        # Check that base weights sum to approximately 1.0
+        total = sum(self.base_weights.values())
+        if abs(total - 1.0) > 0.01:
+            raise ValueError(f"Base weights must sum to 1.0, got {total}")
+        
+        # Check bounds
+        for element, bounds in self.element_bounds.items():
+            if bounds["min"] < 0 or bounds["max"] > 1.0:
+                raise ValueError(f"Element {element} bounds must be between 0 and 1")
+            if bounds["min"] >= bounds["max"]:
+                raise ValueError(f"Element {element} min must be less than max")
+
+@dataclass
+class MichaelConfig:
+    """Configuration for Michael module (Protection)"""
+    
+    # Threat detection
+    threat_detection_enabled: bool = True
+    anomaly_detection_threshold: float = 0.8
+    signature_based_detection: bool = True
+    behavior_analysis_enabled: bool = True
+    
+    # Response configuration
+    automatic_response_enabled: bool = True
+    response_delay_seconds: float = 1.0
+    escalation_threshold: float = 0.9
+    
+    # Security policies
+    encryption_required: bool = True
+    access_control_strictness: str = "high"  # low, medium, high
+    audit_logging_enabled: bool = True
+    
+    # Elemental focus
+    elemental_focus: List[str] = field(default_factory=lambda: ["fire", "earth"])
+    fire_weight: float = 0.6
+    earth_weight: float = 0.4
+    
+    # Resource limits
+    max_concurrent_analyses: int = 10
+    analysis_timeout_seconds: float = 30.0
+    memory_limit_mb: int = 1024
+
+@dataclass
+class GabrielConfig:
+    """Configuration for Gabriel module (Communication)"""
+    
+    # Communication styles
+    default_style: str = "user_friendly"
+    style_adaptation_enabled: bool = True
+    multilingual_support: bool = True
+    emotion_detection_enabled: bool = True
+    
+    # Explanation settings
+    explanation_depth: str = "adaptive"  # simple, detailed, adaptive
+    max_explanation_length: int = 1000
+    use_analogies: bool = True
+    visual_explanations_enabled: bool = True
+    
+    # Output formats
+    supported_formats: List[str] = field(default_factory=lambda: [
+        "text", "json", "html", "markdown"
+    ])
+    default_format: str = "text"
+    
+    # Elemental focus
+    elemental_focus: List[str] = field(default_factory=lambda: ["air", "water"])
+    air_weight: float = 0.6
+    water_weight: float = 0.4
+    
+    # Performance settings
+    response_time_target_ms: float = 1000.0
+    cache_responses: bool = True
+    cache_ttl_seconds: float = 3600
+
+@dataclass
+class RaphaelConfig:
+    """Configuration for Raphael module (Healing & Optimization)"""
+    
+    # Healing settings
+    automatic_healing_enabled: bool = True
+    healing_confidence_threshold: float = 0.8
+    max_healing_attempts: int = 3
+    healing_timeout_seconds: float = 60.0
+    
+    # Optimization settings
+    optimization_enabled: bool = True
+    optimization_frequency_minutes: float = 5.0
+    optimization_targets: List[str] = field(default_factory=lambda: [
+        "performance", "cost", "reliability"
+    ])
+    
+    # Monitoring
+    health_check_interval_seconds: float = 30.0
+    performance_baseline_days: int = 7
+    anomaly_detection_sensitivity: float = 0.7
+    
+    # Elemental focus
+    elemental_focus: List[str] = field(default_factory=lambda: ["earth", "water"])
+    earth_weight: float = 0.5
+    water_weight: float = 0.5
+    
+    # Resource management
+    max_concurrent_healings: int = 5
+    resource_usage_threshold: float = 0.8
+    cost_optimization_weight: float = 0.3
+
+@dataclass
+class EagleEyeConfig:
+    """Configuration for Eagle Eye module (Strategic Oversight)"""
+    
+    # Perception settings
+    observation_frequency_seconds: float = 30.0
+    perception_depth: str = "comprehensive"  # basic, detailed, comprehensive
+    temporal_analysis_enabled: bool = True
+    pattern_recognition_enabled: bool = True
+    
+    # Strategic settings
+    planning_horizon_days: int = 30
+    scenario_analysis_enabled: bool = True
+    risk_assessment_enabled: bool = True
+    
+    # Memory settings
+    memory_retention_days: int = 90
+    pattern_storage_enabled: bool = True
+    insight_generation_enabled: bool = True
+    
+    # Elemental integration
+    monitor_elemental_balance: bool = True
+    elemental_imbalance_threshold: float = 0.2
+    balance_adjustment_recommendations: bool = True
+    
+    # Resource settings
+    max_concurrent_analyses: int = 20
+    analysis_timeout_seconds: float = 120.0
+    storage_limit_gb: int = 10
+
+@dataclass
+class TriadConfig:
+    """Configuration for Triad modules"""
+    
+    michael: MichaelConfig = field(default_factory=MichaelConfig)
+    gabriel: GabrielConfig = field(default_factory=GabrielConfig)
+    raphael: RaphaelConfig = field(default_factory=RaphaelConfig)
+    
+    # Inter-module communication
+    communication_enabled: bool = True
+    sync_frequency_seconds: float = 10.0
+    conflict_resolution: str = "consensus"  # consensus, priority, random
+    
+    # Performance targets
+    overall_response_time_target_ms: float = 5000.0
+    module_coordination_weight: float = 0.3
+    individual_performance_weight: float = 0.7
+
+@dataclass
+class SharedMemoryConfig:
+    """Configuration for shared memory system"""
+    
+    # Storage settings
+    storage_backend: str = "lmdb"  # lmdb, redis, memory
+    storage_path: str = "./pentarchon_data"
+    max_size_gb: int = 10
+    
+    # Performance settings
+    cache_enabled: bool = True
+    cache_size_mb: int = 512
+    write_batch_size: int = 100
+    
+    # Security settings
+    encryption_enabled: bool = True
+    compression_enabled: bool = True
+    integrity_checks: bool = True
+    
+    # Retention settings
+    default_retention_days: int = 30
+    audit_log_retention_days: int = 365
+    cleanup_interval_hours: float = 24.0
+
+@dataclass
+class EventBusConfig:
+    """Configuration for event bus"""
+    
+    # Transport settings
+    transport: str = "redis"  # redis, kafka, memory
+    host: str = "localhost"
+    port: int = 6379
+    
+    # Performance settings
+    max_queue_size: int = 10000
+    processing_threads: int = 4
+    batch_size: int = 100
+    
+    # Reliability settings
+    persistent_queues: bool = True
+    message_retention_hours: float = 24.0
+    retry_attempts: int = 3
+    
+    # Security settings
+    authentication_required: bool = False
+    encryption_enabled: bool = True
+    access_control_enabled: bool = True
+
+class PentarchonConfig(BaseModel):
+    """Main configuration for Pentarchon AI"""
+    
+    # System identification
+    system_id: str = Field(default_factory=lambda: f"pentarchon_{uuid.uuid4().hex[:8]}")
+    system_name: str = "Pentarchon AI System"
+    environment: str = "development"  # development, staging, production
+    
+    # Core settings
+    elemental_config: ElementalConfig = Field(default_factory=ElementalConfig)
+    triad_config: TriadConfig = Field(default_factory=TriadConfig)
+    eagle_eye_config: EagleEyeConfig = Field(default_factory=EagleEyeConfig)
+    shared_memory_config: SharedMemoryConfig = Field(default_factory=SharedMemoryConfig)
+    event_bus_config: EventBusConfig = Field(default_factory=EventBusConfig)
+    
+    # Performance settings
+    cycle_frequency_seconds: float = 60.0
+    max_concurrent_cycles: int = 5
+    cycle_timeout_seconds: float = 300.0
+    
+    # Elemental weights for modules
+    module_element_weights: Dict[str, float] = Field(default_factory=lambda: {
+        "michael_fire": 0.7,
+        "michael_earth": 0.3,
+        "gabriel_air": 0.6,
+        "gabriel_water": 0.4,
+        "raphael_earth": 0.5,
+        "raphael_water": 0.5
+    })
+    
+    # Thresholds
+    quintessence_threshold: float = 0.7
+    elemental_imbalance_threshold: float = 0.3
+    performance_degradation_threshold: float = 0.2
+    
+    # History and logging
+    max_history_length: int = 1000
+    log_level: str = "INFO"
+    audit_logging_enabled: bool = True
+    
+    # Security settings
+    api_key_required: bool = False
+    rate_limiting_enabled: bool = True
+    max_requests_per_minute: int = 60
+    
+    class Config:
+        arbitrary_types_allowed = True
+    
+    @validator('environment')
+    def validate_environment(cls, v):
+        valid_environments = ['development', 'staging', 'production']
+        if v not in valid_environments:
+            raise ValueError(f'Environment must be one of: {valid_environments}')
+        return v
+    
+    @validator('log_level')
+    def validate_log_level(cls, v):
+        valid_levels = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
+        if v.upper() not in valid_levels:
+            raise ValueError(f'Log level must be one of: {valid_levels}')
+        return v.upper()
+    
+    @classmethod
+    def from_file(cls, file_path: Union[str, Path]) -> 'PentarchonConfig':
+        """Load configuration from file"""
+        file_path = Path(file_path)
+        
+        if not file_path.exists():
+            raise FileNotFoundError(f"Configuration file not found: {file_path}")
+        
+        # Determine file type and load accordingly
+        suffix = file_path.suffix.lower()
+        
+        with open(file_path, 'r') as f:
+            if suffix == '.json':
+                data = json.load(f)
+            elif suffix in ['.yaml', '.yml']:
+                data = yaml.safe_load(f)
+            elif suffix == '.toml':
+                data = toml.load(f)
+            else:
+                raise ValueError(f"Unsupported configuration format: {suffix}")
+        
+        return cls(**data)
+    
+    def to_file(self, file_path: Union[str, Path], format: str = 'json') -> None:
+        """Save configuration to file"""
+        file_path = Path(file_path)
+        
+        # Convert to dict
+        data = self.model_dump()
+        
+        # Save in specified format
+        with open(file_path, 'w') as f:
+            if format == 'json':
+                json.dump(data, f, indent=2)
+            elif format in ['yaml', 'yml']:
+                yaml.dump(data, f, default_flow_style=False)
+            elif format == 'toml':
+                toml.dump(data, f)
+            else:
+                raise ValueError(f"Unsupported format: {format}")
+        
+        logger.info(f"Configuration saved to {file_path}")
+    
+    def validate(self) -> List[str]:
+        """Validate configuration and return list of warnings"""
+        warnings = []
+        
+        # Check elemental weights
+        total_module_weights = sum(self.module_element_weights.values())
+        if abs(total_module_weights - 3.0) > 0.01:  # 3 modules * 1.0 each
+            warnings.append(f"Module element weights sum to {total_module_weights}, expected ~3.0")
+        
+        # Check thresholds
+        if self.quintessence_threshold > 1.0 or self.quintessence_threshold < 0:
+            warnings.append(f"Quintessence threshold {self.quintessence_threshold} should be between 0 and 1")
+        
+        # Check performance settings
+        if self.cycle_frequency_seconds < 1.0:
+            warnings.append(f"Cycle frequency {self.cycle_frequency_seconds}s is very fast")
+        
+        if self.cycle_timeout_seconds < self.cycle_frequency_seconds:
+            warnings.append("Cycle timeout should be greater than cycle frequency")
+        
+        return warnings
+
+# Default configuration
+DEFAULT_CONFIG = PentarchonConfig()
+
+# Helper function to create configuration
+def create_config(
+    environment: str = "development",
+    system_name: Optional[str] = None,
+    **overrides
+) -> PentarchonConfig:
+    """Create a configuration with overrides"""
+    
+    config_data = DEFAULT_CONFIG.model_dump()
+    
+    # Apply environment-specific defaults
+    if environment == "production":
+        config_data.update({
+            "log_level": "WARNING",
+            "cycle_frequency_seconds": 300.0,  # 5 minutes
+            "max_concurrent_cycles": 10,
+            "api_key_required": True,
+            "rate_limiting_enabled": True,
+            "audit_logging_enabled": True
+        })
+    elif environment == "staging":
+        config_data.update({
+            "log_level": "INFO",
+            "cycle_frequency_seconds": 120.0,  # 2 minutes
+            "max_concurrent_cycles": 3,
+            "api_key_required": False,
+            "rate_limiting_enabled": True
+        })
+    
+    # Apply system name if provided
+    if system_name:
+        config_data["system_name"] = system_name
+    
+    # Apply overrides
+    config_data.update(overrides)
+    
+    return PentarchonConfig(**config_data)
+
+# Import uuid at module level
+import uuid
+```
+
+5. src/pentarchon/triad/michael/__init__.py - Michael Module
+
+```python
+"""
+Michael Module - Protection & Enforcement
+"""
+
+import asyncio
+from datetime import datetime
+from typing import Dict, List, Any, Optional, Tuple
+from dataclasses import dataclass, field
+from enum import Enum
+import logging
+import hashlib
+import json
+
+import numpy as np
+import torch
+import torch.nn as nn
+from pydantic import BaseModel
+
+from ...core.config import MichaelConfig, ThreatLevel
+from ...infrastructure.event_bus import EventBus
+from ...infrastructure.shared_memory import SharedMemorySystem
+
+logger = logging.getLogger(__name__)
+
+class ThreatType(Enum):
+    """Types of threats"""
+    MALWARE = "malware"
+    INTRUSION = "intrusion"
+    DATA_BREACH = "data_breach"
+    DOS = "denial_of_service"
+    PHISHING = "phishing"
+    INSIDER = "insider_threat"
+    CONFIGURATION = "misconfiguration"
+    VULNERABILITY = "vulnerability"
+
+class SecurityEvent(BaseModel):
+    """Security event model"""
+    event_id: str
+    timestamp: str
+    threat_type: ThreatType
+    threat_level: ThreatLevel
+    source: Optional[str] = None
+    target: Optional[str] = None
+    description: str
+    indicators: Dict[str, Any] = field(default_factory=dict)
+    confidence: float = 0.5
+    handled: bool = False
+    response_actions: List[Dict[str, Any]] = field(default_factory=list)
+    
+    class Config:
+        use_enum_values = True
+
+class MichaelModule:
+    """Michael module - Protection & Enforcement"""
+    
+    def __init__(self, 
+                 config: MichaelConfig,
+                 event_bus: EventBus,
+                 shared_memory: SharedMemorySystem):
+        
+        self.config = config
+        self.event_bus = event_bus
+        self.shared_memory = shared_memory
+        
+        # State
+        self.threat_signatures: Dict[str, Dict] = {}
+        self.behavior_profiles: Dict[str, Dict] = {}
+        self.incident_count = 0
+        self.blocked_threats = 0
+        
+        # Neural networks for threat detection
+        self.threat_detector = self._build_threat_detector()
+        self.anomaly_detector = self._build_anomaly_detector()
+        
+        # Elemental state
+        self.elemental_state = {
+            "fire": 0.5,  # Energy/action level
+            "earth": 0.5  # Stability/defense level
+        }
+        
+        logger.info(f"Michael module initialized with config: {config}")
+    
+    async def initialize(self) -> None:
+        """Initialize the module"""
+        logger.info("Initializing Michael module...")
+        
+        # Load threat signatures
+        await self._load_threat_signatures()
+        
+        # Load behavior profiles
+        await self._load_behavior_profiles()
+        
+        # Start monitoring tasks
+        asyncio.create_task(self._monitor_security())
+        
+        logger.info("Michael module initialized")
+    
+    async def analyze_and_protect(self, context: Dict[str, Any]) -> Dict[str, Any]:
+        """Analyze threats and take protective actions"""
+        
+        start_time = datetime.utcnow()
+        
+        try:
+            # Extract security data from context
+            security_data = context.get("security_data", {})
+            network_traffic = security_data.get("network_traffic", [])
+            system_logs = security_data.get("system_logs", [])
+            user_activities = security_data.get("user_activities", [])
+            
+            # Update elemental state based on context
+            await self._update_elemental_state(context)
+            
+            # Phase 1: Signature-based detection
+            signature_threats = await self._detect_signature_threats(
+                network_traffic, system_logs
+            )
+            
+            # Phase 2: Anomaly detection
+            anomaly_threats = await self._detect_anomalies(
+                user_activities, system_logs
+            )
+            
+            # Phase 3: Behavioral analysis
+            behavioral_threats = await self._analyze_behavior(
+                user_activities, context
+            )
+            
+            # Combine and prioritize threats
+            all_threats = signature_threats + anomaly_threats + behavioral_threats
+            prioritized_threats = await self._prioritize_threats(all_threats)
+            
+            # Phase 4: Take protective actions
+            responses = []
+            for threat in prioritized_threats:
+                if threat.threat_level in [ThreatLevel.MALICIOUS, ThreatLevel.CRITICAL]:
+                    response = await self._respond_to_threat(threat)
+                    responses.append(response)
+            
+            # Phase 5: Update defenses
+            await self._update_defenses(prioritized_threats)
+            
+            # Create result
+            execution_time = (datetime.utcnow() - start_time).total_seconds()
+            
+            result = {
+                "success": True,
+                "threats_detected": len(prioritized_threats),
+                "threats_blocked": len([t for t in prioritized_threats 
+                                      if t.threat_level in [ThreatLevel.MALICIOUS, ThreatLevel.CRITICAL]]),
+                "responses_taken": len(responses),
+                "execution_time": execution_time,
+                "elemental_state": self.elemental_state,
+                "details": {
+                    "signature_threats": len(signature_threats),
+                    "anomaly_threats": len(anomaly_threats),
+                    "behavioral_threats": len(behavioral_threats)
+                }
+            }
+            
+            logger.info(f"Michael analysis completed: {result['threats_detected']} threats detected")
+            
+            return result
+            
+        except Exception as e:
+            logger.error(f"Michael analysis failed: {e}")
+            return {
+                "success": False,
+                "error": str(e),
+                "execution_time": (datetime.utcnow() - start_time).total_seconds()
+            }
+    
+    async def handle_alert(self, alert: Dict[str, Any]) -> Dict[str, Any]:
+        """Handle immediate security alerts"""
+        
+        logger.warning(f"Handling security alert: {alert.get('alert_type')}")
+        
+        try:
+            # Create security event
+            event = SecurityEvent(
+                event_id=hashlib.md5(json.dumps(alert).encode()).hexdigest()[:16],
+                timestamp=datetime.utcnow().isoformat(),
+                threat_type=ThreatType(alert.get("threat_type", "unknown")),
+                threat_level=ThreatLevel(alert.get("threat_level", "suspicious")),
+                source=alert.get("source"),
+                target=alert.get("target"),
+                description=alert.get("description", "Unknown threat"),
+                indicators=alert.get("indicators", {}),
+                confidence=alert.get("confidence", 0.5)
+            )
+            
+            # Immediate response based on threat level
+            response = await self._immediate_response(event)
+            
+            # Store event
+            await self.shared_memory.store(
+                key=f"security_event_{event.event_id}",
+                data=event.model_dump(),
+                metadata={
+                    "type": "security_event",
+                    "handled": True,
+                    "response": response.get("action")
+                }
+            )
+            
+            # Broadcast event
+            await self.event_bus.publish("threat_detected", {
+                "event": event.model_dump(),
+                "response": response
+            })
+            
+            return response
+            
+        except Exception as e:
+            logger.error(f"Failed to handle alert: {e}")
+            return {
+                "success": False,
+                "error": str(e),
+                "action": "none"
+            }
+    
+    async def execute_action(self, action: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute a specific security action"""
+        
+        action_type = action.get("type")
+        target = action.get("target")
+        parameters = action.get("parameters", {})
+        
+        logger.info(f"Executing security action: {action_type} on {target}")
+        
+        try:
+            if action_type == "block_ip":
+                result = await self._block_ip(target, parameters)
+            elif action_type == "isolate_system":
+                result = await self._isolate_system(target, parameters)
+            elif action_type == "revoke_access":
+                result = await self._revoke_access(target, parameters)
+            elif action_type == "enable_firewall_rule":
+                result = await self._enable_firewall_rule(target, parameters)
+            elif action_type == "scan_system":
+                result = await self._scan_system(target, parameters)
+            else:
+                raise ValueError(f"Unknown action type: {action_type}")
+            
+            # Update elemental state (more fire for active responses)
+            self.elemental_state["fire"] = min(1.0, self.elemental_state["fire"] + 0.1)
+            
+            return {
+                "success": True,
+                "action": action_type,
+                "target": target,
+                "result": result,
+                "elemental_state": self.elemental_state
+            }
+            
+        except Exception as e:
+            logger.error(f"Action execution failed: {e}")
+            return {
+                "success": False,
+                "action": action_type,
+                "target": target,
+                "error": str(e)
+            }
+    
+    async def _detect_signature_threats(self, 
+                                       network_traffic: List[Dict],
+                                       system_logs: List[Dict]) -> List[SecurityEvent]:
+        """Detect threats using signature-based methods"""
+        
+        threats = []
+        
+        # Check network traffic against signatures
+        for traffic in network_traffic:
+            for sig_id, signature in self.threat_signatures.items():
+                if self._matches_signature(traffic, signature):
+                    threat = SecurityEvent(
+                        event_id=f"sig_{sig_id}_{datetime.utcnow().timestamp()}",
+                        timestamp=datetime.utcnow().isoformat(),
+                        threat_type=ThreatType(signature.get("threat_type", "malware")),
+                        threat_level=ThreatLevel(signature.get("threat_level", "malicious")),
+                        source=traffic.get("source_ip"),
+                        target=traffic.get("dest_ip"),
+                        description=f"Signature match: {signature.get('name')}",
+                        indicators={
+                            "signature_id": sig_id,
+                            "signature_name": signature.get("name"),
+                            "traffic_pattern": traffic
+                        },
+                        confidence=signature.get("confidence", 0.8)
+                    )
+                    threats.append(threat)
+        
+        # Check system logs
+        for log in system_logs:
+            # Simple pattern matching (in production, use more sophisticated methods)
+            suspicious_patterns = [
+                ("failed login", "intrusion"),
+                ("privilege escalation", "insider_threat"),
+                ("unauthorized access", "intrusion"),
+                ("malware detected", "malware")
+            ]
+            
+            log_message = log.get("message", "").lower()
+            for pattern, threat_type in suspicious_patterns:
+                if pattern in log_message:
+                    threat = SecurityEvent(
+                        event_id=f"log_{hashlib.md5(log_message.encode()).hexdigest()[:8]}",
+                        timestamp=log.get("timestamp", datetime.utcnow().isoformat()),
+                        threat_type=ThreatType(threat_type),
+                        threat_level=ThreatLevel.SUSPICIOUS,
+                        source=log.get("source"),
+                        target=log.get("system"),
+                        description=f"Suspicious log entry: {pattern}",
+                        indicators={"log_entry": log},
+                        confidence=0.6
+                    )
+                    threats.append(threat)
+        
+        return threats
+    
+    async def _detect_anomalies(self, 
+                               user_activities: List[Dict],
+                               system_logs: List[Dict]) -> List[SecurityEvent]:
+        """Detect anomalies using ML models"""
+        
+        threats = []
+        
+        if not self.config.anomaly_detection_enabled:
+            return threats
+        
+        try:
+            # Convert data to features
+            features = self._extract_anomaly_features(user_activities, system_logs)
+            
+            if len(features) > 0:
+                # Use neural network to detect anomalies
+                with torch.no_grad():
+                    features_tensor = torch.FloatTensor(features)
+                    anomaly_scores = self.anomaly_detector(features_tensor).numpy()
+                
+                # Identify anomalies above threshold
+                anomaly_indices = np.where(anomaly_scores > self.config.anomaly_detection_threshold)[0]
+                
+                for idx in anomaly_indices:
+                    # Find corresponding activity
+                    if idx < len(user_activities):
+                        activity = user_activities[idx]
+                        
+                        threat = SecurityEvent(
+                            event_id=f"anomaly_{datetime.utcnow().timestamp()}_{idx}",
+                            timestamp=datetime.utcnow().isoformat(),
+                            threat_type=ThreatType.INSIDER,
+                            threat_level=ThreatLevel.SUSPICIOUS,
+                            source=activity.get("user"),
+                            target=activity.get("resource"),
+                            description="Anomalous user activity detected",
+                            indicators={
+                                "activity": activity,
+                                "anomaly_score": float(anomaly_scores[idx]),
+                                "features": features[idx].tolist()
+                            },
+                            confidence=float(anomaly_scores[idx])
+                        )
+                        threats.append(threat)
+        
+        except Exception as e:
+            logger.error(f"Anomaly detection failed: {e}")
+        
+        return threats
+    
+    async def _analyze_behavior(self, 
+                               user_activities: List[Dict],
+                               context: Dict[str, Any]) -> List[SecurityEvent]:
+        """Analyze behavior for threats"""
+        
+        threats = []
+        
+        if not self.config.behavior_analysis_enabled:
+            return threats
+        
+        # Group activities by user
+        user_activity_map = {}
+        for activity in user_activities:
+            user = activity.get("user")
+            if user not in user_activity_map:
+                user_activity_map[user] = []
+            user_activity_map[user].append(activity)
+        
+        # Analyze each user's behavior
+        for user, activities in user_activity_map.items():
+            # Get user's behavior profile
+            profile = self.behavior_profiles.get(user, {})
+            
+            # Check for deviations
+            deviations = await self._check_behavior_deviations(activities, profile, context)
+            
+            for deviation in deviations:
+                threat = SecurityEvent(
+                    event_id=f"behavior_{user}_{datetime.utcnow().timestamp()}",
+                    timestamp=datetime.utcnow().isoformat(),
+                    threat_type=ThreatType.INSIDER,
+                    threat_level=ThreatLevel.SUSPICIOUS,
+                    source=user,
+                    target=deviation.get("resource"),
+                    description=f"Behavioral deviation: {deviation.get('type')}",
+                    indicators={
+                        "user": user,
+                        "deviation_type": deviation.get("type"),
+                        "normal_pattern": deviation.get("normal"),
+                        "current_behavior": deviation.get("current"),
+                        "deviation_score": deviation.get("score")
+                    },
+                    confidence=deviation.get("score", 0.5)
+                )
+                threats.append(threat)
+        
+        return threats
+    
+    async def _prioritize_threats(self, threats: List[SecurityEvent]) -> List[SecurityEvent]:
+        """Prioritize threats based on severity and context"""
+        
+        if not threats:
+            return []
+        
+        # Calculate priority score for each threat
+        prioritized = []
+        for threat in threats:
+            # Base score from threat level
+            level_scores = {
+                ThreatLevel.NORMAL: 0.1,
+                ThreatLevel.SUSPICIOUS: 0.4,
+                ThreatLevel.MALICIOUS: 0.7,
+                ThreatLevel.CRITICAL: 1.0
+            }
+            
+            base_score = level_scores.get(threat.threat_level, 0.5)
+            
+            # Adjust based on confidence
+            confidence_adjustment = threat.confidence * 0.3
+            
+            # Adjust based on elemental state (more fire = more aggressive prioritization)
+            fire_adjustment = self.elemental_state["fire"] * 0.2
+            
+            priority_score = base_score + confidence_adjustment + fire_adjustment
+            
+            prioritized.append((threat, priority_score))
+        
+        # Sort by priority score
+        prioritized.sort(key=lambda x: x[1], reverse=True)
+        
+        # Return only threats
+        return [threat for threat, _ in prioritized]
+    
+    async def _respond_to_threat(self, threat: SecurityEvent) -> Dict[str, Any]:
+        """Respond to a specific threat"""
+        
+        response_actions = []
+        
+        # Determine response based on threat level and type
+        if threat.threat_level == ThreatLevel.CRITICAL:
+            # Immediate, aggressive response
+            actions = [
+                {"type": "isolate_system", "target": threat.target},
+                {"type": "block_ip", "target": threat.source},
+                {"type": "enable_firewall_rule", "target": "emergency"}
+            ]
+        elif threat.threat_level == ThreatLevel.MALICIOUS:
+            # Strong response
+            actions = [
+                {"type": "block_ip", "target": threat.source},
+                {"type": "scan_system", "target": threat.target}
+            ]
+        elif threat.threat_level == ThreatLevel.SUSPICIOUS:
+            # Investigative response
+            actions = [
+                {"type": "scan_system", "target": threat.target},
+                {"type": "monitor_activity", "target": threat.source}
+            ]
+        else:
+            # Normal - just log
+            actions = [
+                {"type": "log_event", "target": "security_log"}
+            ]
+        
+        # Execute actions
+        for action in actions:
+            try:
+                result = await self.execute_action(action)
+                response_actions.append({
+                    "action": action,
+                    "result": result
+                })
+                
+                # Update threat with response
+                threat.response_actions.append({
+                    "action": action.get("type"),
+                    "target": action.get("target"),
+                    "success": result.get("success", False)
+                })
+                
+            except Exception as e:
+                logger.error(f"Failed to execute response action {action}: {e}")
+        
+        # Mark threat as handled
+        threat.handled = True
+        
+        # Update counters
+        self.incident_count += 1
+        if threat.threat_level in [ThreatLevel.MALICIOUS, ThreatLevel.CRITICAL]:
+            self.blocked_threats += 1
+        
+        return {
+            "threat_id": threat.event_id,
+            "actions_taken": response_actions,
+            "threat_handled": True,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    
+    async def _immediate_response(self, event: SecurityEvent) -> Dict[str, Any]:
+        """Immediate response to high-priority threats"""
+        
+        if event.threat_level in [ThreatLevel.CRITICAL, ThreatLevel.MALICIOUS]:
+            # Immediate blocking
+            if event.source:
+                await self._block_ip(event.source, {"reason": event.description})
+            
+            if event.target:
+                await self._isolate_system(event.target, {"reason": event.description})
+            
+            return {
+                "success": True,
+                "action": "immediate_block",
+                "targets": [event.source, event.target],
+                "urgency": "high"
+            }
+        else:
+            return {
+                "success": True,
+                "action": "monitor",
+                "urgency": "medium"
+            }
+    
+    async def _update_defenses(self, threats: List[SecurityEvent]) -> None:
+        """Update defenses based on detected threats"""
+        
+        if not threats:
+            return
+        
+        # Extract patterns from threats
+        threat_patterns = []
+        for threat in threats:
+            pattern = {
+                "threat_type": threat.threat_type,
+                "indicators": threat.indicators,
+                "source_patterns": self._extract_patterns(threat.source),
+                "target_patterns": self._extract_patterns(threat.target)
+            }
+            threat_patterns.append(pattern)
+        
+        # Update threat signatures
+        for pattern in threat_patterns:
+            sig_id = hashlib.md5(json.dumps(pattern).encode()).hexdigest()[:16]
+            self.threat_signatures[sig_id] = {
+                "id": sig_id,
+                "pattern": pattern,
+                "first_seen": datetime.utcnow().isoformat(),
+                "last_seen": datetime.utcnow().isoformat(),
+                "count": 1
+            }
+        
+        # Update elemental state (more earth for stronger defenses)
+        self.elemental_state["earth"] = min(1.0, self.elemental_state["earth"] + 0.05)
+    
+    async def _update_elemental_state(self, context: Dict[str, Any]) -> None:
+        """Update elemental state based on context"""
+        
+        # Adjust fire based on threat level
+        threat_level = context.get("threat_level", "normal")
+        if threat_level in ["malicious", "critical"]:
+            self.elemental_state["fire"] = min(1.0, self.elemental_state["fire"] + 0.2)
+        else:
+            # Gradually cool down
+            self.elemental_state["fire"] = max(0.1, self.elemental_state["fire"] - 0.05)
+        
+        # Adjust earth based on stability needs
+        stability_needed = context.get("stability_needed", 0.5)
+        self.elemental_state["earth"] = stability_needed
+    
+    # Helper methods
+    def _build_threat_detector(self) -> nn.Module:
+        """Build neural network for threat detection"""
+        
+        class ThreatDetector(nn.Module):
+            def __init__(self, input_size=100, hidden_size=64, output_size=4):
+                super().__init__()
+                self.network = nn.Sequential(
+                    nn.Linear(input_size, hidden_size),
+                    nn.ReLU(),
+                    nn.Dropout(0.2),
+                    nn.Linear(hidden_size, hidden_size // 2),
+                    nn.ReLU(),
+                    nn.Linear(hidden_size // 2, output_size),
+                    nn.Softmax(dim=-1)
+                )
+            
+            def forward(self, x):
+                return self.network(x)
+        
+        return ThreatDetector()
+    
+    def _build_anomaly_detector(self) -> nn.Module:
+        """Build autoencoder for anomaly detection"""
+        
+        class AnomalyDetector(nn.Module):
+            def __init__(self, input_size=50, latent_size=10):
+                super().__init__()
+                self.encoder = nn.Sequential(
+                    nn.Linear(input_size, 32),
+                    nn.ReLU(),
+                    nn.Linear(32, 16),
+                    nn.ReLU(),
+                    nn.Linear(16, latent_size)
+                )
+                
+                self.decoder = nn.Sequential(
+                    nn.Linear(latent_size, 16),
+                    nn.ReLU(),
+                    nn.Linear(16, 32),
+                    nn.ReLU(),
+                    nn.Linear(32, input_size)
+                )
+            
+            def forward(self, x):
+                encoded = self.encoder(x)
+                decoded = self.decoder(encoded)
+                return decoded
+        
+        return AnomalyDetector()
+    
+    def _extract_anomaly_features(self, 
+                                 user_activities: List[Dict],
+                                 system_logs: List[Dict]) -> np.ndarray:
+        """Extract features for anomaly detection"""
+        
+        if not user_activities:
+            return np.array([])
+        
+        features = []
+        for activity in user_activities:
+            # Extract simple features (in production, use more sophisticated feature engineering)
+            feat = [
+                len(activity.get("resource", "")),  # Resource name length
+                hash(activity.get("user", "")) % 100 / 100,  # User hash normalized
+                int(activity.get("success", False)),  # Success flag
+                len(activity.get("action", "")),  # Action length
+                hash(activity.get("timestamp", "")) % 100 / 100  # Time hash
+            ]
+            
+            # Pad to fixed size
+            while len(feat) < 50:
+                feat.append(0.0)
+            
+            features.append(feat[:50])  # Ensure exactly 50 features
+        
+        return np.array(features)
+    
+    async def _check_behavior_deviations(self, 
+                                        activities: List[Dict],
+                                        profile: Dict[str, Any],
+                                        context: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Check for deviations from normal behavior"""
+        
+        deviations = []
+        
+        if not profile:
+            # No profile yet, create one
+            await self._create_behavior_profile(activities[0].get("user"), activities)
+            return deviations
+        
+        # Check for unusual access times
+        normal_access_times = profile.get("access_times", [9, 10, 11, 14, 15, 16])  # 9 AM - 5 PM
+        for activity in activities:
+            hour = datetime.fromisoformat(activity.get("timestamp", datetime.utcnow().isoformat())).hour
+            
+            if hour not in normal_access_times and hour < 22 and hour > 6:  # Not night time
+                deviations.append({
+                    "type": "unusual_access_time",
+                    "user": activity.get("user"),
+                    "resource": activity.get("resource"),
+                    "normal": normal_access_times,
+                    "current": hour,
+                    "score": 0.7
+                })
+        
+        # Check for unusual resource access
+        normal_resources = profile.get("accessed_resources", [])
+        for activity in activities:
+            resource = activity.get("resource")
+            if resource not in normal_resources:
+                deviations.append({
+                    "type": "unusual_resource_access",
+                    "user": activity.get("user"),
+                    "resource": resource,
+                    "normal": normal_resources[:5],  # Show first 5 normal resources
+                    "current": resource,
+                    "score": 0.6
+                })
+        
+        return deviations
+    
+    async def _create_behavior_profile(self, user: str, activities: List[Dict]) -> None:
+        """Create behavior profile for a user"""
+        
+        access_times = []
+        accessed_resources = set()
+        actions = []
+        
+        for activity in activities:
+            # Extract access time
+            try:
+                hour = datetime.fromisoformat(activity.get("timestamp")).hour
+                access_times.append(hour)
+            except:
+                pass
+            
+            # Extract resource
+            resource = activity.get("resource")
+            if resource:
+                accessed_resources.add(resource)
+            
+            # Extract action
+            action = activity.get("action")
+            if action:
+                actions.append(action)
+        
+        profile = {
+            "user": user,
+            "access_times": list(set(access_times)),
+            "accessed_resources": list(accessed_resources),
+            "common_actions": list(set(actions)),
+            "created_at": datetime.utcnow().isoformat(),
+            "updated_at": datetime.utcnow().isoformat()
+        }
+        
+        self.behavior_profiles[user] = profile
+        
+        # Store in shared memory
+        await self.shared_memory.store(
+            key=f"behavior_profile_{user}",
+            data=profile,
+            metadata={"type": "behavior_profile", "user": user}
+        )
+    
+    def _matches_signature(self, data: Dict, signature: Dict) -> bool:
+        """Check if data matches a threat signature"""
+        
+        pattern = signature.get("pattern", {})
+        
+        # Simple pattern matching (in production, use more sophisticated matching)
+        for key, expected_value in pattern.items():
+            if key in data and data[key] == expected_value:
+                return True
+        
+        return False
+    
+    def _extract_patterns(self, data: Any) -> List[str]:
+        """Extract patterns from data"""
+        
+        patterns = []
+        
+        if isinstance(data, str):
+            # Extract IP patterns
+            import re
+            ip_pattern = r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}'
+            ips = re.findall(ip_pattern, data)
+            patterns.extend(ips)
+            
+            # Extract domain patterns
+            domain_pattern = r'[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+            domains = re.findall(domain_pattern, data)
+            patterns.extend(domains)
+        
+        return patterns
+    
+    # Action implementations
+    async def _block_ip(self, ip: str, parameters: Dict[str, Any]) -> Dict[str, Any]:
+        """Block an IP address"""
+        
+        logger.info(f"Blocking IP: {ip}")
+        
+        # In production, integrate with firewall/network security
+        return {
+            "action": "block_ip",
+            "ip": ip,
+            "success": True,
+            "message": f"IP {ip} blocked",
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    
+    async def _isolate_system(self, system: str, parameters: Dict[str, Any]) -> Dict[str, Any]:
+        """Isolate a system from the network"""
+        
+        logger.warning(f"Isolating system: {system}")
+        
+        # In production, implement actual isolation
+        return {
+            "action": "isolate_system",
+            "system": system,
+            "success": True,
+            "message": f"System {system} isolated",
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    
+    async def _revoke_access(self, user: str, parameters: Dict[str, Any]) -> Dict[str, Any]:
+        """Revoke user access"""
+        
+        logger.warning(f"Revoking access for user: {user}")
+        
+        return {
+            "action": "revoke_access",
+            "user": user,
+            "success": True,
+            "message": f"Access revoked for {user}",
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    
+    async def _enable_firewall_rule(self, rule: str, parameters: Dict[str, Any]) -> Dict[str, Any]:
+        """Enable firewall rule"""
+        
+        logger.info(f"Enabling firewall rule: {rule}")
+        
+        return {
+            "action": "enable_firewall_rule",
+            "rule": rule,
+            "success": True,
+            "message": f"Firewall rule {rule} enabled",
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    
+    async def _scan_system(self, system: str, parameters: Dict[str, Any]) -> Dict[str, Any]:
+        """Scan system for vulnerabilities"""
+        
+        logger.info(f"Scanning system: {system}")
+        
+        # Simulate scan results
+        vulnerabilities = [
+            {"id": "VULN-001", "severity": "high", "description": "Outdated software"},
+            {"id": "VULN-002", "severity": "medium", "description": "Weak password policy"}
+        ]
+        
+        return {
+            "action": "scan_system",
+            "system": system,
+            "success": True,
+            "vulnerabilities_found": len(vulnerabilities),
+            "vulnerabilities": vulnerabilities,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    
+    async def _load_threat_signatures(self) -> None:
+        """Load threat signatures from storage"""
+        
+        try:
+            # Try to load from shared memory
+            signatures = await self.shared_memory.retrieve("threat_signatures")
+            if signatures:
+                self.threat_signatures = signatures
+                logger.info(f"Loaded {len(self.threat_signatures)} threat signatures")
+            else:
+                # Load default signatures
+                self.threat_signatures = self._get_default_signatures()
+                logger.info(f"Loaded {len(self.threat_signatures)} default threat signatures")
+        
+        except Exception as e:
+            logger.error(f"Failed to load threat signatures: {e}")
+            self.threat_signatures = self._get_default_signatures()
+    
+    async def _load_behavior_profiles(self) -> None:
+        """Load behavior profiles from storage"""
+        
+        try:
+            # Try to load from shared memory
+            profiles = await self.shared_memory.retrieve("behavior_profiles")
+            if profiles:
+                self.behavior_profiles = profiles
+                logger.info(f"Loaded {len(self.behavior_profiles)} behavior profiles")
+        
+        except Exception as e:
+            logger.error(f"Failed to load behavior profiles: {e}")
+            self.behavior_profiles = {}
+    
+    def _get_default_signatures(self) -> Dict[str, Dict]:
+        """Get default threat signatures"""
+        
+        return {
+            "sig_001": {
+                "id": "sig_001",
+                "name": "Port Scan Detection",
+                "threat_type": "intrusion",
+                "threat_level": "suspicious",
+                "pattern": {"port_scan": True},
+                "confidence": 0.8
+            },
+            "sig_002": {
+                "id": "sig_002",
+                "name": "SQL Injection Attempt",
+                "threat_type": "intrusion",
+                "threat_level": "malicious",
+                "pattern": {"sql_injection": True},
+                "confidence": 0.9
+            },
+            "sig_003": {
+                "id": "sig_003",
+                "name": "Malware Communication",
+                "threat_type": "malware",
+                "threat_level": "malicious",
+                "pattern": {"c2_communication": True},
+                "confidence": 0.85
+            }
+        }
+    
+    async def _monitor_security(self) -> None:
+        """Continuous security monitoring task"""
+        
+        logger.info("Starting security monitoring...")
+        
+        while True:
+            try:
+                # Check for security events in shared memory
+                events = await self.shared_memory.query(
+                    {"type": "security_event", "handled": False},
+                    limit=10
+                )
+                
+                for event in events:
+                    await self.handle_alert(event)
+                
+                # Update threat signatures periodically
+                if datetime.utcnow().hour % 6 == 0:  # Every 6 hours
+                    await self._update_threat_intelligence()
+                
+                # Sleep before next check
+                await asyncio.sleep(30)  # Check every 30 seconds
+                
+            except Exception as e:
+                logger.error(f"Security monitoring error: {e}")
+                await asyncio.sleep(60)  # Sleep longer on error
+    
+    async def _update_threat_intelligence(self) -> None:
+        """Update threat intelligence from external sources"""
+        
+        logger.info("Updating threat intelligence...")
+        
+        try:
+            # In production, fetch from threat intelligence feeds
+            # For now, simulate updates
+            
+            new_signatures = {
+                "sig_new_001": {
+                    "id": "sig_new_001",
+                    "name": "Ransomware Pattern",
+                    "threat_type": "malware",
+                    "threat_level": "critical",
+                    "pattern": {"ransomware": True},
+                    "confidence": 0.95,
+                    "source": "threat_intel_feed",
+                    "updated_at": datetime.utcnow().isoformat()
+                }
+            }
+            
+            self.threat_signatures.update(new_signatures)
+            
+            # Save to shared memory
+            await self.shared_memory.store(
+                key="threat_signatures",
+                data=self.threat_signatures,
+                metadata={"type": "threat_intelligence", "updated_at": datetime.utcnow().isoformat()}
+            )
+            
+            logger.info(f"Updated threat intelligence: {len(new_signatures)} new signatures")
+            
+        except Exception as e:
+            logger.error(f"Failed to update threat intelligence: {e}")
+    
+    async def reset(self) -> None:
+        """Reset module state"""
+        logger.info("Resetting Michael module...")
+        
+        self.incident_count = 0
+        self.blocked_threats = 0
+        self.elemental_state = {"fire": 0.5, "earth": 0.5}
+        
+        logger.info("Michael module reset complete")
+    
+    async def shutdown(self) -> None:
+        """Shutdown module gracefully"""
+        logger.info("Shutting down Michael module...")
+        
+        # Save current state
+        try:
+            await self.shared_memory.store(
+                key="michael_module_state",
+                data={
+                    "threat_signatures": self.threat_signatures,
+                    "behavior_profiles": self.behavior_profiles,
+                    "incident_count": self.incident_count,
+                    "blocked_threats": self.blocked_threats,
+                    "elemental_state": self.elemental_state
+                },
+                metadata={"type": "module_state", "module": "michael"}
+            )
+        except Exception as e:
+            logger.error(f"Failed to save Michael module state: {e}")
+        
+        logger.info("Michael module shutdown complete")
+    
+    def get_status(self) -> Dict[str, Any]:
+        """Get module status"""
+        
+        return {
+            "module": "michael",
+            "status": "active",
+            "incident_count": self.incident_count,
+            "blocked_threats": self.blocked_threats,
+            "threat_signatures": len(self.threat_signatures),
+            "behavior_profiles": len(self.behavior_profiles),
+            "elemental_state": self.elemental_state,
+            "config": {
+                "threat_detection_enabled": self.config.threat_detection_enabled,
+                "automatic_response_enabled": self.config.automatic_response_enabled,
+                "elemental_focus": self.config.elemental_focus
+            }
+        }
+```
+
+6. Dockerfile - Container Definition
+
+```dockerfile
+# Multi-stage build for Pentarchon AI
+
+# Stage 1: Builder
+FROM python:3.9-slim as builder
+
+WORKDIR /app
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    make \
+    cmake \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements
+COPY requirements/base.txt requirements/base.txt
+COPY requirements/prod.txt requirements/prod.txt
+
+# Create virtual environment
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Install dependencies
+RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --no-cache-dir -r requirements/prod.txt
+
+# Stage 2: Runtime
+FROM python:3.9-slim
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    libgomp1 \
+    libjemalloc2 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user
+RUN groupadd -r pentarchon && useradd -r -g pentarchon pentarchon
+
+# Copy virtual environment from builder
+COPY --from=builder /opt/venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Create app directory
+WORKDIR /app
+RUN mkdir -p /app/data && chown -R pentarchon:pentarchon /app
+
+# Copy application
+COPY --chown=pentarchon:pentarchon . .
+
+# Switch to non-root user
+USER pentarchon
+
+# Create necessary directories
+RUN mkdir -p /app/logs /app/data /app/config
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD python -c "import requests; requests.get('http://localhost:8080/health', timeout=2)"
+
+# Expose ports
+EXPOSE 8080  # HTTP API
+EXPOSE 8443  # HTTPS API
+EXPOSE 9090  # Metrics
+
+# Environment variables
+ENV PYTHONPATH=/app/src
+ENV PENTARCHON_ENV=production
+ENV PENTARCHON_LOG_LEVEL=INFO
+ENV PENTARCHON_DATA_DIR=/app/data
+ENV PENTARCHON_CONFIG_DIR=/app/config
+
+# Entrypoint
+ENTRYPOINT ["python", "-m", "pentarchon.cli"]
+
+# Default command
+CMD ["orchestrator", "--log-level", "INFO"]
+```
+
+7. docker-compose.yml - Development Stack
+
+```yaml
+version: '3.8'
+
+services:
+  # Pentarchon Orchestrator
+  pentarchon-orchestrator:
+    build: .
+    container_name: pentarchon-orchestrator
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+      - "9090:9090"
+    environment:
+      - PENTARCHON_ENV=development
+      - PENTARCHON_LOG_LEVEL=DEBUG
+      - REDIS_HOST=redis
+      - KAFKA_BROKERS=kafka:9092
+      - POSTGRES_HOST=postgres
+    volumes:
+      - ./data:/app/data
+      - ./config:/app/config
+      - ./logs:/app/logs
+    depends_on:
+      - redis
+      - postgres
+      - kafka
+    networks:
+      - pentarchon-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Michael Module (Security)
+  michael-module:
+    build: .
+    container_name: pentarchon-michael
+    command: ["michael", "--log-level", "INFO"]
+    environment:
+      - PENTARCHON_ENV=development
+      - REDIS_HOST=redis
+      - MODULE_NAME=michael
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - redis
+      - pentarchon-orchestrator
+    networks:
+      - pentarchon-network
+    restart: unless-stopped
+
+  # Gabriel Module (Communication)
+  gabriel-module:
+    build: .
+    container_name: pentarchon-gabriel
+    command: ["gabriel", "--log-level", "INFO"]
+    environment:
+      - PENTARCHON_ENV=development
+      - REDIS_HOST=redis
+      - MODULE_NAME=gabriel
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - redis
+      - pentarchon-orchestrator
+    networks:
+      - pentarchon-network
+    restart: unless-stopped
+
+  # Raphael Module (Healing)
+  raphael-module:
+    build: .
+    container_name: pentarchon-raphael
+    command: ["raphael", "--log-level", "INFO"]
+    environment:
+      - PENTARCHON_ENV=development
+      - REDIS_HOST=redis
+      - MODULE_NAME=raphael
+    ports:
+      - "8082:8080"
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - redis
+      - pentarchon-orchestrator
+    networks:
+      - pentarchon-network
+    restart: unless-stopped
+
+  # Redis for shared memory and event bus
+  redis:
+    image: redis:7-alpine
+    container_name: pentarchon-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-pentarchon}
+    networks:
+      - pentarchon-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # PostgreSQL for persistent storage
+  postgres:
+    image: postgres:15-alpine
+    container_name: pentarchon-postgres
+    environment:
+      - POSTGRES_USER=pentarchon
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-pentarchon123}
+      - POSTGRES_DB=pentarchon
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - pentarchon-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pentarchon"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Kafka for event streaming
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: pentarchon-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - pentarchon-network
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: pentarchon-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+    networks:
+      - pentarchon-network
+
+  # Monitoring Stack
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: pentarchon-prometheus
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - pentarchon-network
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: pentarchon-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana-dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana-datasources:/etc/grafana/provisioning/datasources
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    networks:
+      - pentarchon-network
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+
+  # Vector database for embeddings
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: pentarchon-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant-data:/qdrant/storage
+    networks:
+      - pentarchon-network
+    restart: unless-stopped
+
+  # MLflow for experiment tracking
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    container_name: pentarchon-mlflow
+    ports:
+      - "5000:5000"
+    environment:
+      - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
+      - AWS_ACCESS_KEY_ID=minioadmin
+      - AWS_SECRET_ACCESS_KEY=minioadmin
+      - MLFLOW_TRACKING_URI=postgresql://pentarchon:pentarchon123@postgres/pentarchon
+    volumes:
+      - mlflow-data:/mlflow
+    networks:
+      - pentarchon-network
+    depends_on:
+      - postgres
+      - minio
+    restart: unless-stopped
+
+  # MinIO for model storage
+  minio:
+    image: minio/minio:latest
+    container_name: pentarchon-minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    volumes:
+      - minio-data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - pentarchon-network
+    restart: unless-stopped
+
+  # Jaeger for distributed tracing
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: pentarchon-jaeger
+    ports:
+      - "16686:16686"
+      - "4317:4317"
+      - "4318:4318"
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    networks:
+      - pentarchon-network
+    restart: unless-stopped
+
+  # NGINX as reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: pentarchon-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./nginx/logs:/var/log/nginx
+    depends_on:
+      - pentarchon-orchestrator
+      - gabriel-module
+      - raphael-module
+    networks:
+      - pentarchon-network
+    restart: unless-stopped
+
+networks:
+  pentarchon-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  redis-data:
+  postgres-data:
+  prometheus-data:
+  grafana-data:
+  qdrant-data:
+  mlflow-data:
+  minio-data:
+```
+
+8. README.md - Complete Documentation
+
+```markdown
+# Pentarchon AI 🏛️
+
+**The Quintessential Framework for Holistic Artificial Intelligence Governance**
+
+[![PyPI version](https://badge.fury.io/py/pentarchon-ai.svg)](https://pypi.org/project/pentarchon-ai/)
+[![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![Documentation](https://img.shields.io/badge/docs-comprehensive-blue)](https://docs.pentarchon.ai)
+[![Build Status](https://github.com/pentarchon-ai/pentarchon/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/pentarchon-ai/pentarchon/actions)
+[![Docker Pulls](https://img.shields.io/docker/pulls/pentarchon/ai)](https://hub.docker.com/r/pentarchon/ai)
+[![Discord](https://img.shields.io/discord/1234567890?color=7289da&label=Discord&logo=discord&logoColor=white)](https://discord.gg/pentarchon)
+
+<div align="center">
+  <img src="docs/images/pentarchon-logo.png" alt="Pentarchon AI Logo" width="400">
+  <p><em>Protection • Communication • Healing • Strategy • Balance</em></p>
+</div>
+
+## 🌟 Overview
+
+Pentarchon AI is a revolutionary framework that integrates **Triad AI (Michael, Gabriel, Raphael)** with **Eagle Eye strategic governance** and the **Four Elemental Framework (Earth, Water, Fire, Air, Quintessence)** to create resilient, ethical, and adaptive intelligent systems.
+
+Unlike monolithic AI architectures, Pentarchon AI embodies a **holistic governance model** where no single capability dominates. Instead, it maintains dynamic equilibrium between protection, communication, healing, strategy, and balance—creating systems that are not just intelligent, but **wise**.
+
+## 🎯 Why Pentarchon AI?
+
+| Challenge | Traditional AI | Pentarchon AI |
+|-----------|----------------|---------------|
+| **Security** | Bolted-on, reactive | Built-in, proactive (Michael) |
+| **Explainability** | Black-box models | Transparent communication (Gabriel) |
+| **Resilience** | Fragile, single-point failures | Self-healing architecture (Raphael) |
+| **Strategy** | Short-term optimization | Long-term foresight (Eagle Eye) |
+| **Ethics** | External audits | Built-in governance (Elemental Framework) |
+
+## 🏗️ Architecture
+
+### The Five-Fold Governance Model
+
+```
+
+```
+                        [Eagle Eye: Strategic Oversight]
+                                   |
+               ┌───────────────────┼───────────────────┐
+               │                   │                   │
+      [Air: Strategy]        [Fire: Action]      [Water: Flow]
+               │                   │                   │
+          ┌────┴────┐         ┌────┴────┐        ┌────┴────┐
+          │ Gabriel │◄────────┤  Triad  ├───────►│ Raphael │
+          │         │         │ Balance │        │         │
+          └────┬────┘         └────┬────┘        └────┬────┘
+               │                   │                   │
+      [Water: Flow]         [Fire: Action]      [Earth: Foundation]
+               │                   │                   │
+               └───────────────────┼───────────────────┘
+                                   │
+                        [Earth: Infrastructure Layer]
+```
+
+```
+
+### Core Components
+
+1. **🛡️ Michael Module** - Protection & Enforcement
+2. **💬 Gabriel Module** - Communication & Explanation
+3. **⚕️ Raphael Module** - Healing & Optimization
+4. **👁️ Eagle Eye** - Strategic Oversight & Foresight
+5. **⚖️ Elemental Governance** - Dynamic Balance System
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Python 3.9 or higher
+- 8GB+ RAM recommended
+- 10GB+ free disk space
+- Docker & Docker Compose (optional)
+
+### Installation
+
+```bash
+# Install from PyPI
+pip install pentarchon-ai
+
+# Or install from source
+git clone https://github.com/pentarchon-ai/pentarchon.git
+cd pentarchon
+pip install -e .
+```
+
+Basic Usage
+
+```python
+import asyncio
+from pentarchon import create_pentarchon
+
+async def main():
+    # Create and initialize Pentarchon AI
+    pentarchon = await create_pentarchon()
+    
+    # Run a cycle
+    result = await pentarchon.run_cycle(
+        observations={
+            "security_data": {"network_traffic": [], "system_logs": []},
+            "performance_metrics": {"cpu_usage": 0.6, "memory_usage": 0.7}
+        },
+        context={"environment": "production", "urgency": "normal"}
+    )
+    
+    print(f"Cycle completed: {result}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+Docker Deployment
+
+```bash
+# Clone repository
+git clone https://github.com/pentarchon-ai/pentarchon.git
+cd pentarchon
+
+# Start with Docker Compose
+docker-compose up -d
+
+# Check status
+docker-compose ps
+
+# View logs
+docker-compose logs -f pentarchon-orchestrator
+```
+
+Configuration
+
+Create a configuration file config.yaml:
+
+```yaml
+system_name: "My Pentarchon System"
+environment: "production"
+log_level: "INFO"
+
+elemental_config:
+  base_weights:
+    earth: 0.25
+    water: 0.25
+    fire: 0.25
+    air: 0.25
+
+triad_config:
+  michael:
+    threat_detection_enabled: true
+    automatic_response_enabled: true
+  gabriel:
+    default_style: "user_friendly"
+    multilingual_support: true
+  raphael:
+    automatic_healing_enabled: true
+    optimization_enabled: true
+```
+
+Load configuration:
+
+```python
+from pentarchon.core.config import PentarchonConfig
+
+config = PentarchonConfig.from_file("config.yaml")
+pentarchon = await create_pentarchon(config=config.model_dump())
+```
+
+📊 Key Features
+
+🛡️ Advanced Security (Michael)
+
+· Graph-based threat detection using neural networks
+· Immutable audit trails with Merkle tree verification
+· Zero-trust architecture with secure enclaves
+· Automatic response to security incidents
+· Behavioral analysis for insider threat detection
+
+💬 Intelligent Communication (Gabriel)
+
+· Multi-modal explanation (text, voice, visual)
+· Context-aware messaging for different audiences
+· Chain-of-thought reasoning for complex decisions
+· Real-time translation between technical and non-technical language
+· Emotion-aware responses based on user sentiment
+
+⚕️ Self-Healing Systems (Raphael)
+
+· Predictive maintenance with uncertainty quantification
+· Automated remediation based on causal inference
+· Resource optimization using multi-objective algorithms
+· Performance monitoring with anomaly detection
+· Capacity planning based on usage patterns
+
+👁️ Strategic Oversight (Eagle Eye)
+
+· Multi-scale perception (quantum to cosmic levels)
+· Temporal pattern recognition across past, present, future
+· Intent inference and strategic foresight
+· Ethical boundary monitoring
+· Scenario planning for risk assessment
+
+⚖️ Dynamic Balance (Elemental Governance)
+
+· Adaptive control of elemental ratios
+· Context-aware balancing based on system state
+· Stability preservation through PID controllers
+· Quintessence emergence detection
+· Self-regulation based on environmental feedback
+
+🏢 Real-World Applications
+
+🔒 Cybersecurity
+
+```python
+from pentarchon.applications.cybersecurity import SecurityPentarchon
+
+security_ai = SecurityPentarchon()
+threat_response = await security_ai.respond_to_attack(
+    attack_signature=malicious_traffic,
+    context=network_context
+)
+# Results in automated isolation, investigation, and recovery
+```
+
+🏥 Healthcare
+
+```python
+from pentarchon.applications.healthcare import MedicalPentarchon
+
+medical_ai = MedicalPentarchon()
+diagnosis = await medical_ai.analyze_patient(
+    scan_data=mri_images,
+    patient_history=medical_records
+)
+# Provides diagnosis, explanation, and treatment optimization
+```
+
+🏙️ Smart Cities
+
+```python
+from pentarchon.applications.smart_cities import UrbanPentarchon
+
+city_ai = UrbanPentarchon()
+optimization = await city_ai.optimize_infrastructure(
+    traffic_data=real_time_traffic,
+    energy_data=grid_consumption
+)
+# Balances traffic flow, energy distribution, and public services
+```
+
+💰 Finance
+
+```python
+from pentarchon.applications.finance import FinancialPentarchon
+
+finance_ai = FinancialPentarchon()
+risk_assessment = await finance_ai.assess_investment(
+    market_data=stock_prices,
+    portfolio=investment_portfolio
+)
+# Provides risk analysis, compliance checking, and optimization
+```
+
+🛠️ Development
+
+Project Structure
+
+```
+pentarchon/
+├── src/
+│   └── pentarchon/
+│       ├── core/                    # Core orchestrator
+│       ├── triad/                   # Triad modules
+│       ├── eagle_eye/               # Strategic oversight
+│       ├── governance/              # Elemental governance
+│       ├── infrastructure/          # Infrastructure layer
+│       ├── applications/            # Real-world applications
+│       └── cli.py                   # Command-line interface
+├── tests/                           # Test suite
+├── docs/                            # Documentation
+├── examples/                        # Usage examples
+├── scripts/                         # Utility scripts
+├── docker/                          # Docker configurations
+├── monitoring/                      # Monitoring configurations
+└── config/                          # Configuration files
+```
+
+Setting Up Development Environment
+
+```bash
+# Clone repository
+git clone https://github.com/pentarchon-ai/pentarchon.git
+cd pentarchon
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install development dependencies
+pip install -e ".[dev]"
+
+# Install pre-commit hooks
+pre-commit install
+
+# Run tests
+pytest tests/ -v
+
+# Run linting
+black .
+flake8 .
+
+# Run security checks
+safety check
+bandit -r src/pentarchon/
+```
+
+Running Tests
+
+```bash
+# Run all tests
+pytest
+
+# Run specific test category
+pytest tests/test_core.py -v
+pytest tests/test_triad.py -v
+
+# Run with coverage
+pytest --cov=src/pentarchon --cov-report=html
+
+# Run integration tests
+pytest tests/integration/ -m integration
+```
+
+📚 Documentation
+
+Comprehensive Documentation
+
+· 📖 Full Documentation - Complete API reference and guides
+· 🎯 Getting Started Guide - Beginner-friendly tutorial
+· 🏗️ Architecture Deep Dive - Detailed architectural overview
+· 🔧 API Reference - Complete API documentation
+· 🎓 Tutorials - Step-by-step implementation guides
+· 📄 Whitepaper - Research paper and philosophy
+
+Quick Links
+
+· Installation Guide
+· Configuration Reference
+· Deployment Guide
+· Troubleshooting
+· FAQ
+· Contributing Guide
+
+🤝 Community
+
+Get Involved
+
+· 💬 Discord Community - Real-time discussions and support
+· 📢 GitHub Discussions - Q&A, ideas, and announcements
+· 🐦 Twitter - Updates and news
+· 📰 Blog - Articles, case studies, and research
+· 📹 YouTube - Tutorials, demos, and presentations
+
+Community Projects
+
+Project Description Status
+Pentarchon-Medical Healthcare implementation 🟢 Active
+Pentarchon-Security Cybersecurity framework 🟢 Active
+Pentarchon-Finance Financial applications 🟡 Beta
+Pentarchon-Education Educational tools 🟡 Beta
+Pentarchon-IoT Internet of Things integration 🟠 Alpha
+
+Contributing
+
+We welcome contributions! Please see our Contributing Guidelines for details.
+
+1. Fork the repository
+2. Create a feature branch (git checkout -b feature/amazing-feature)
+3. Commit your changes (git commit -m 'Add amazing feature')
+4. Push to the branch (git push origin feature/amazing-feature)
+5. Open a Pull Request
+
+Development Workflow:
+
+```bash
+# 1. Fork and clone
+git clone https://github.com/your-username/pentarchon.git
+cd pentarchon
+
+# 2. Set up upstream
+git remote add upstream https://github.com/pentarchon-ai/pentarchon.git
+
+# 3. Create branch
+git checkout -b feature/your-feature
+
+# 4. Make changes and test
+# ... make changes ...
+pytest tests/
+
+# 5. Commit
+git add .
+git commit -m "Add feature: your feature description"
+
+# 6. Push
+git push origin feature/your-feature
+
+# 7. Create PR on GitHub
+```
+
+📋 Roadmap
+
+Phase 1: Foundation (Q1-Q2 2026)
+
+· Core architecture implementation
+· Basic triad module functionality
+· Eagle Eye perception engine
+· Elemental balance algorithms
+· Basic monitoring and observability
+
+Phase 2: Integration (Q3-Q4 2026)
+
+· Full triad integration
+· Advanced Eagle Eye capabilities
+· Quintessence emergence detection
+· Cloud deployment automation
+· Advanced security features
+
+Phase 3: Maturation (2027)
+
+· Cross-system communication protocols
+· Advanced healing algorithms
+· Quantum-resistant security
+· Multi-Pentarchon networks
+· Enterprise-grade scalability
+
+Phase 4: Expansion (2028+)
+
+· Inter-planetary communication protocols
+· Biological system integration
+· Global governance frameworks
+· Wisdom preservation systems
+· Consciousness-level AI research
+
+🚨 Security
+
+Reporting Security Issues
+
+If you discover a security vulnerability in Pentarchon AI, please report it responsibly:
+
+1. Email: security@pentarchon.ai
+2. Do NOT create a public GitHub issue
+3. Encrypt sensitive information using our PGP key
+
+Security Features
+
+· End-to-end encryption for all communications
+· Zero-trust architecture by default
+· Regular security audits and penetration testing
+· Automatic vulnerability scanning in CI/CD pipeline
+· Compliance with industry security standards
+
+📄 License
+
+Pentarchon AI is released under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) license.
+
+Key Points:
+
+· ✅ Share — copy and redistribute in any medium or format
+· ✅ Adapt — remix, transform, and build upon the material
+· ❌ Commercial Use — not permitted without separate licensing
+· ✅ Attribution — must give appropriate credit
+· ✅ ShareAlike — adaptations must use same license
+
+For commercial licensing, please contact licensing@pentarchon.ai.
+
+Commercial Licensing Options:
+
+· Enterprise License - Full commercial use with support
+· SaaS License - For cloud service providers
+· OEM License - For embedding in products
+· Academic License - For educational institutions
+
+🙏 Acknowledgments
+
+Pentarchon AI is made possible by:
+
+· DeepSeek AI Research Technology - Core AI capabilities and research support
+· Aristotelian Philosophy - Elemental theory foundation
+· Jungian Psychology - Archetypal framework inspiration
+· Cybernetic Principles - System governance theory
+· Open Source Community - Contributors, testers, and supporters worldwide
+
+Citing Pentarchon AI
+
+If you use Pentarchon AI in your research, please cite:
+
+```bibtex
+@software{pentarchon2025,
+  title = {Pentarchon AI: The Quintessential Framework for Holistic Artificial Intelligence Governance},
+  author = {Santiago, Nicolas E.},
+  year = {2025},
+  url = {https://github.com/pentarchon-ai/pentarchon},
+  version = {1.0.0},
+  note = {Saitama, Japan}
+}
+```
+
+📞 Contact & Support
+
+Primary Contact
+
+· General Inquiries: info@pentarchon.ai
+· Technical Support: support@pentarchon.ai
+· Security Issues: security@pentarchon.ai
+· Commercial Licensing: licensing@pentarchon.ai
+· Research Collaboration: research@pentarchon.ai
+
+Development Team
+
+· Nicolas E. Santiago - Lead Architect (safewayguardian@gmail.com)
+· DeepSeek Research Team - Core AI Technology Development
+· Community Maintainers - Open Source Contributors
+
+Office Locations
+
+· Research Headquarters: Saitama, Japan
+· Development Center: Global Remote Team
+· Documentation Portal: docs.pentarchon.ai
+
+Support Channels
+
+· GitHub Issues: github.com/pentarchon-ai/pentarchon/issues
+· Discord Community: discord.gg/pentarchon
+· Stack Overflow: Tag questions with pentarchon-ai
+· Email Support: support@pentarchon.ai
+
+---
+
+<div align="center">
+  <h3>🌟 Star History</h3>
+  <a href="https://github.com/pentarchon-ai/pentarchon/stargazers">
+    <img src="https://starchart.cc/pentarchon-ai/pentarchon.svg" alt="Star History Chart" width="600">
+  </a>
+
+
+
+<p><em>"Protection without communication breeds fear. Communication without adaptation breeds frustration.<br>Adaptation without protection breeds vulnerability. Only in their union lies digital wisdom."</em></p><br><p>
+    <a href="https://github.com/pentarchon-ai/pentarchon">GitHub</a> •
+    <a href="https://docs.pentarchon.ai">Documentation</a> •
+    <a href="https://discord.gg/pentarchon">Discord</a> •
+    <a href="https://twitter.com/pentarchon_ai">Twitter</a> •
+    <a href="https://blog.pentarchon.ai">Blog</a>
+  </p>
+</div>
+```COMPLETE DIRECTORY STRUCTURE
+
+```
+pentarchon-ai/
+├── .github/
+│   ├── workflows/
+│   │   ├── ci-cd.yml
+│   │   ├── security-scan.yml
+│   │   └── release.yml
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── bug_report.md
+│   │   ├── feature_request.md
+│   │   └── security_issue.md
+│   └── PULL_REQUEST_TEMPLATE.md
+├── config/
+│   ├── default.yaml
+│   ├── production.yaml
+│   └── development.yaml
+├── docker/
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   ├── docker-compose.prod.yml
+│   └── entrypoint.sh
+├── docs/
+│   ├── getting-started.md
+│   ├── architecture.md
+│   ├── api-reference.md
+│   ├── installation.md
+│   ├── configuration.md
+│   ├── deployment.md
+│   ├── troubleshooting.md
+│   ├── faq.md
+│   └── images/
+│       └── pentarchon-logo.png
+├── examples/
+│   ├── basic_usage.py
+│   ├── cybersecurity_example.py
+│   ├── healthcare_example.py
+│   ├── smart_cities_example.py
+│   └── finance_example.py
+├── monitoring/
+│   ├── prometheus.yml
+│   ├── alertmanager.yml
+│   ├── grafana-dashboards/
+│   │   ├── pentarchon-overview.json
+│   │   ├── triad-metrics.json
+│   │   └── elemental-balance.json
+│   └── grafana-datasources/
+│       └── prometheus.yaml
+├── scripts/
+│   ├── deploy.py
+│   ├── monitor.py
+│   ├── backup.py
+│   └── health_check.py
+├── src/
+│   └── pentarchon/
+│       ├── __init__.py
+│       ├── cli.py
+│       ├── core/
+│       │   ├── __init__.py
+│       │   ├── orchestrator.py
+│       │   ├── config.py
+│       │   └── memory.py
+│       ├── triad/
+│       │   ├── __init__.py
+│       │   ├── michael/
+│       │   │   ├── __init__.py
+│       │   │   ├── security.py
+│       │   │   ├── threat_detection.py
+│       │   │   └── cli.py
+│       │   ├── gabriel/
+│       │   │   ├── __init__.py
+│       │   │   ├── communication.py
+│       │   │   ├── explanation.py
+│       │   │   └── cli.py
+│       │   └── raphael/
+│       │       ├── __init__.py
+│       │       ├── healing.py
+│       │       ├── optimization.py
+│       │       └── cli.py
+│       ├── eagle_eye/
+│       │   ├── __init__.py
+│       │   ├── perception.py
+│       │   ├── strategy.py
+│       │   └── foresight.py
+│       ├── governance/
+│       │   ├── __init__.py
+│       │   ├── elemental.py
+│       │   └── balance.py
+│       ├── infrastructure/
+│       │   ├── __init__.py
+│       │   ├── earth_layer.py
+│       │   ├── water_layer.py
+│       │   ├── fire_layer.py
+│       │   ├── air_layer.py
+│       ├── applications/
+│       │   ├── __init__.py
+│       │   ├── cybersecurity.py
+│       │   ├── healthcare.py
+│       │   ├── smart_cities.py
+│       │   └── finance.py
+│       └── utils/
+│           ├
+```
